@@ -1,26 +1,83 @@
 // swift-tools-version: 6.3
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "AgenticProviders",
+    platforms: [
+        .macOS(.v13)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "AgenticProviders",
-            targets: ["AgenticProviders"]
+            name: "AgenticApple",
+            targets: ["AgenticApple"]
+        ),
+        .library(
+            name: "AgenticAWS",
+            targets: ["AgenticAWS"]
+        ),
+        .library(
+            name: "AgenticOllama",
+            targets: ["AgenticOllama"]
+        ),
+        .executable(
+            name: "provtest",
+            targets: ["AgenticProvidersTestFlows"]
         ),
     ],
+    dependencies: [
+        .package(url: "https://github.com/leviouwendijk/Agentic.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/AgenticExecution.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/AgenticModels.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/AWSConnector.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/Primitives.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/Milieu.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/Cryptography.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/Schema.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/SchemaMacros.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/TestFlows.git", branch: "master"),
+    ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "AgenticProviders"
+            name: "AgenticApple",
+            dependencies: [
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "Primitives", package: "Primitives"),
+                .product(name: "Schema", package: "Schema"),
+            ]
         ),
-        .testTarget(
-            name: "AgenticProvidersTests",
-            dependencies: ["AgenticProviders"]
+        .target(
+            name: "AgenticAWS",
+            dependencies: [
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "AgenticExecution", package: "AgenticExecution"),
+                .product(name: "AgenticModels", package: "AgenticModels"),
+                .product(name: "AWSConnector", package: "AWSConnector"),
+                .product(name: "Schema", package: "Schema"),
+                .product(name: "SchemaMacros", package: "SchemaMacros"),
+            ]
+        ),
+        .target(
+            name: "AgenticOllama",
+            dependencies: [
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "Primitives", package: "Primitives"),
+                .product(name: "Milieu", package: "Milieu"),
+                .product(name: "Cryptography", package: "Cryptography"),
+            ]
+        ),
+        .executableTarget(
+            name: "AgenticProvidersTestFlows",
+            dependencies: [
+                "AgenticApple",
+                "AgenticAWS",
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "AgenticModels", package: "AgenticModels"),
+                .product(name: "Primitives", package: "Primitives"),
+                .product(name: "AWSConnector", package: "AWSConnector"),
+                .product(name: "Schema", package: "Schema"),
+                .product(name: "TestFlows", package: "TestFlows"),
+            ]
         ),
     ],
     swiftLanguageModes: [.v6]
