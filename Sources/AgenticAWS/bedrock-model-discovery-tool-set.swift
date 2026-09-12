@@ -2,7 +2,7 @@ import Agentic
 import AgenticExecution
 import Foundation
 import Schema
-import SchemaMacros
+import Macros
 
 @JSONSchema
 public struct BedrockListModelHandlesToolInput: Sendable, Codable, Hashable {
