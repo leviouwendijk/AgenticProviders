@@ -63,6 +63,23 @@ public struct BedrockModelGateway: AgentModelGateway {
             diagnostics: diagnostics
         )
     }
+
+    public static func resolve(
+        identifier: AgentModelGatewayIdentifier = .aws_bedrock,
+        region: String,
+        metadata: [String: String] = [:],
+        diagnostics: BedrockDiagnostics = .disabled
+    ) throws -> Self {
+        try .init(
+            identifier: identifier,
+            runtime: BedrockRuntimeClient(
+                region: region,
+                credentials: try AWSCredentials.resolve()
+            ),
+            metadata: metadata,
+            diagnostics: diagnostics
+        )
+    }
 }
 
 public struct BedrockModelResponseProvider: AgentModelResponseProviding {

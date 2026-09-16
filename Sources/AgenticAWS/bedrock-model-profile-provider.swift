@@ -307,4 +307,8 @@ private extension BedrockModelProfiles {
 
 public extension AgentModelGatewayIdentifier {
     static let aws_bedrock: Self = "aws_bedrock"
+    static let aws_bedrock_us_east_1: Self =
+        "aws_bedrock_us_east_1"
+    static let aws_bedrock_us_west_2: Self =
+        "aws_bedrock_us_west_2"
 }

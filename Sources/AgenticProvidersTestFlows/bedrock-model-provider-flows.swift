@@ -79,12 +79,10 @@ extension AgenticProvidersFlowTesting {
     static func runBedrockMultipleGatewayProviderRealization()
         async throws -> [TestFlowDiagnostic]
     {
-        let primaryGatewayIdentifier = AgentModelGatewayIdentifier(
-            "aws.eu.production"
-        )
-        let secondaryGatewayIdentifier = AgentModelGatewayIdentifier(
-            "aws.us.research"
-        )
+        let primaryGatewayIdentifier =
+            AgentModelGatewayIdentifier.aws_bedrock_us_east_1
+        let secondaryGatewayIdentifier =
+            AgentModelGatewayIdentifier.aws_bedrock_us_west_2
 
         let provider = BedrockModelProvider(
             gateways: [
@@ -107,12 +105,12 @@ extension AgenticProvidersFlowTesting {
             ],
             profiles: [
                 BedrockModelProfiles.profile(
-                    identifier: "aws.eu.production:fixture",
+                    identifier: "aws_bedrock_us_east_1:fixture",
                     model: "fixture-model",
                     gatewayIdentifier: primaryGatewayIdentifier
                 ),
                 BedrockModelProfiles.profile(
-                    identifier: "aws.us.research:fixture",
+                    identifier: "aws_bedrock_us_west_2:fixture",
                     model: "fixture-model",
                     gatewayIdentifier: secondaryGatewayIdentifier
                 ),
