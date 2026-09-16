@@ -7,7 +7,7 @@
       "location" : "https://github.com/leviouwendijk/Agentic.git",
       "state" : {
         "branch" : "master",
-        "revision" : "6586bbc2fb0b842c82cbf2b189dad6bca2ab0fdc"
+        "revision" : "bc7665735957b8298fdb58d6c5d8e050913ee57c"
       }
     },
     {
@@ -16,7 +16,7 @@
       "location" : "https://github.com/leviouwendijk/AgenticExecution.git",
       "state" : {
         "branch" : "master",
-        "revision" : "e7093ca165f45c38a8b28c8bee9e4a67557ef3f4"
+        "revision" : "bd2b59da2538999898493a53af1005d2eb7c28f5"
       }
     },
     {
@@ -25,7 +25,16 @@
       "location" : "https://github.com/leviouwendijk/AgenticModels.git",
       "state" : {
         "branch" : "master",
-        "revision" : "92d93f4ecbe9654714d085eda51a56e8dbe89f79"
+        "revision" : "cd6dcc39beb2a6ff69ad01328f5e716c5d96cae2"
+      }
+    },
+    {
+      "identity" : "agenticrecovery",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/AgenticRecovery.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "c4893afa6feffba5a8607b23f266fc022df7a2a4"
       }
     },
     {
@@ -34,7 +43,7 @@
       "location" : "https://github.com/leviouwendijk/AgenticWorkspace.git",
       "state" : {
         "branch" : "master",
-        "revision" : "3e2242b2ac008e47b7e60f7771b27c60a3ec23e6"
+        "revision" : "34add55626d2248ab49ccd6d794002903d819533"
       }
     },
     {
@@ -88,7 +97,7 @@
       "location" : "https://github.com/leviouwendijk/Difference.git",
       "state" : {
         "branch" : "master",
-        "revision" : "7d295238c789f009fd720f3cf5ca8e730068c0c5"
+        "revision" : "8332c1ae56901b73f3b23a9c490516f0f6bb78fb"
       }
     },
     {
@@ -106,7 +115,16 @@
       "location" : "https://github.com/leviouwendijk/Errors.git",
       "state" : {
         "branch" : "master",
-        "revision" : "8b5f809214ca8ea3401378f1dc673ca60ceaf902"
+        "revision" : "72d3aaf1203e3443df34ac4bef61683d5285eb25"
+      }
+    },
+    {
+      "identity" : "excerpt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Excerpt.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "9369604e8cfe761588003c61ed849462ca8fb14e"
       }
     },
     {
@@ -187,7 +205,7 @@
       "location" : "https://github.com/leviouwendijk/Position.git",
       "state" : {
         "branch" : "master",
-        "revision" : "66a8219a6780a6346e55c9531f8fabaa4ff713d9"
+        "revision" : "23c0ec4218a64853830a9448a97b756731e0afab"
       }
     },
     {
@@ -196,7 +214,7 @@
       "location" : "https://github.com/leviouwendijk/Primitives.git",
       "state" : {
         "branch" : "master",
-        "revision" : "e626fa0746aee024729bf56549e774d13aa17099"
+        "revision" : "03f80f4df2eab71c69de01e5b0e43f786c8abaad"
       }
     },
     {
@@ -214,7 +232,7 @@
       "location" : "https://github.com/leviouwendijk/Readers.git",
       "state" : {
         "branch" : "master",
-        "revision" : "c47991874555ffd0b01ec504d3ba98afde0c1677"
+        "revision" : "b966dbeb1201557a1f19dd23ff514f4a401d63ae"
       }
     },
     {
@@ -232,7 +250,7 @@
       "location" : "https://github.com/leviouwendijk/Selection.git",
       "state" : {
         "branch" : "master",
-        "revision" : "3b30f85d1644cbe81f6eb11e4997cdfd122ba668"
+        "revision" : "a366ef72b58f066f7dc910c02ee4ae953966fb8a"
       }
     },
     {
@@ -259,7 +277,7 @@
       "location" : "https://github.com/leviouwendijk/Terminal.git",
       "state" : {
         "branch" : "master",
-        "revision" : "0b63af5e4049793948d3fe3dbdd47d2b5958250d"
+        "revision" : "269258eea726dc92d563f84cf0e53879c22e5e50"
       }
     },
     {
@@ -278,6 +296,15 @@
       "state" : {
         "branch" : "master",
         "revision" : "f719d1dc72ed4125831db80e9a9714a814676515"
+      }
+    },
+    {
+      "identity" : "version",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/leviouwendijk/Version.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "25ff3c90cfef8053119f607910219a6ecdb304b7"
       }
     }
   ],

@@ -22,11 +22,18 @@ enum OllamaURLSessionTrust: Sendable {
             _ = try EnvironmentExtractor.value(
                 caCertificatePathSymbol
             )
-        } catch {
-            throw OllamaGatewayError
-                .missingTLSCACertificateConfiguration(
-                    symbol: caCertificatePathSymbol
-                )
+        } catch let error as EnvironmentExtractableError {
+            switch error {
+            case .missing(_),
+                 .empty(_):
+                throw OllamaGatewayError
+                    .missingTLSCACertificateConfiguration(
+                        symbol: caCertificatePathSymbol
+                    )
+
+            case .inferenceRequired:
+                throw error
+            }
         }
 
         return .privateCA(

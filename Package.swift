@@ -71,6 +71,7 @@ let package = Package(
             dependencies: [
                 "AgenticApple",
                 "AgenticAWS",
+                "AgenticOllama",
                 .product(name: "Agentic", package: "Agentic"),
                 .product(name: "AgenticModels", package: "AgenticModels"),
                 .product(name: "Primitives", package: "Primitives"),

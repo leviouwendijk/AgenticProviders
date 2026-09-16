@@ -56,14 +56,18 @@ public struct OllamaModelGateway: AgentModelGateway {
         provider
     }
 
+    public static let endpointSymbol =
+        "AGENTIC_MODEL_OLLAMA_ENDPOINT"
+
     public static func resolve(
         identifier: AgentModelGatewayIdentifier = .ollama,
+        endpointSymbol: String = OllamaModelGateway.endpointSymbol,
         contextWindow: Int = 32_768,
         thinking: Bool = false,
         metadata: [String: String] = [:]
     ) throws -> Self {
         let rawEndpoint = try EnvironmentExtractor.value(
-            "AGENTIC_MODEL_OLLAMA_ENDPOINT"
+            endpointSymbol
         )
         guard let endpoint = URL(string: rawEndpoint) else {
             throw OllamaGatewayError.invalidEndpoint(rawEndpoint)
