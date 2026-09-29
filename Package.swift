@@ -20,14 +20,16 @@ let package = Package(
             name: "AgenticOllama",
             targets: ["AgenticOllama"]
         ),
+
+        // testing
         .executable(
-            name: "provtest",
+            name: "t_ap_main",
             targets: ["AgenticProvidersTestFlows"]
         ),
     ],
     dependencies: [
         .package(url: "https://github.com/leviouwendijk/Agentic.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/AgenticExecution.git", branch: "master"),
+        .package(url: "https://github.com/leviouwendijk/Workspace.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/AgenticModels.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/AWSConnector.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/Primitives.git", branch: "master"),
@@ -50,7 +52,7 @@ let package = Package(
             name: "AgenticAWS",
             dependencies: [
                 .product(name: "Agentic", package: "Agentic"),
-                .product(name: "AgenticExecution", package: "AgenticExecution"),
+                .product(name: "Workspace", package: "Workspace"),
                 .product(name: "AgenticModels", package: "AgenticModels"),
                 .product(name: "AWSConnector", package: "AWSConnector"),
                 .product(name: "Schema", package: "Schema"),
@@ -66,6 +68,7 @@ let package = Package(
                 .product(name: "Cryptography", package: "Cryptography"),
             ]
         ),
+
         .executableTarget(
             name: "AgenticProvidersTestFlows",
             dependencies: [
@@ -78,7 +81,8 @@ let package = Package(
                 .product(name: "AWSConnector", package: "AWSConnector"),
                 .product(name: "Schema", package: "Schema"),
                 .product(name: "TestFlows", package: "TestFlows"),
-            ]
+            ],
+            path: "Testing/AgenticProvidersTestFlows"
         ),
     ],
     swiftLanguageModes: [.v6]

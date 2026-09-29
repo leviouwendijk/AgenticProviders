@@ -73,7 +73,7 @@ private extension BedrockStreamAccumulator {
         var toolUseId: String?
         var toolName: String?
         var toolInput: String = ""
-        var final: AgentContentBlock?
+        var final: MessageContentBlock?
     }
 
     mutating func consume(
@@ -126,9 +126,11 @@ private extension BedrockStreamAccumulator {
             return []
         }
 
-        let call = AgentToolCall(
+        let call = ToolCall(
             id: id,
-            name: name,
+            tool: ToolIdentifier(
+                rawValue: name
+            ),
             input: try toolInput(
                 id: id,
                 text: block.toolInput
@@ -169,7 +171,7 @@ private extension BedrockStreamAccumulator {
         ]
     }
 
-    func finalBlocks() -> [AgentContentBlock] {
+    func finalBlocks() -> [MessageContentBlock] {
         blocks.keys.sorted().compactMap { index in
             guard let block = blocks[index] else {
                 return nil

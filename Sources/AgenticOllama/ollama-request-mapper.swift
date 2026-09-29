@@ -42,8 +42,8 @@ struct OllamaRequestMapper {
 }
 
 private struct OllamaMessageMapper {
-    static func map(_ messages: [AgentMessage]) throws -> [OllamaChatMessage] {
-        var callsByID: [String: AgentToolCall] = [:]
+    static func map(_ messages: [Message]) throws -> [OllamaChatMessage] {
+        var callsByID: [String: ToolCall] = [:]
         for message in messages {
             for block in message.content.blocks {
                 if case .tool_call(let call) = block {
@@ -77,7 +77,7 @@ private struct OllamaMessageMapper {
                                 id: call.id,
                                 function: .init(
                                     index: calls.count,
-                                    name: call.name,
+                                    name: call.tool.rawValue,
                                     arguments: call.input
                                 )
                             )
@@ -105,7 +105,8 @@ private struct OllamaMessageMapper {
                         throw OllamaGatewayError.unsupportedContent(message.role)
                     }
 
-                    let name = result.name ?? callsByID[result.toolCallID]?.name
+                    let name = result.tool?.rawValue
+                        ?? callsByID[result.toolCallID]?.tool.rawValue
                     guard let name, !name.isEmpty else {
                         throw OllamaGatewayError.missingToolName(result.toolCallID)
                     }
@@ -124,7 +125,7 @@ private struct OllamaMessageMapper {
         return mapped
     }
 
-    private static func textOnly(_ message: AgentMessage) throws -> String {
+    private static func textOnly(_ message: Message) throws -> String {
         var text = ""
         for block in message.content.blocks {
             guard case .text(let value) = block else {
@@ -138,7 +139,7 @@ private struct OllamaMessageMapper {
         return text
     }
 
-    private static func toolResultText(_ result: AgentToolResult) -> String {
+    private static func toolResultText(_ result: ToolResult) -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let rendered: String
@@ -153,7 +154,7 @@ private struct OllamaMessageMapper {
 }
 
 private struct OllamaToolMapper {
-    static func map(_ tools: [AgentToolDefinition]) -> [OllamaTool]? {
+    static func map(_ tools: [ToolDescriptor]) -> [OllamaTool]? {
         guard !tools.isEmpty else { return nil }
         return tools.map { definition in
             .init(

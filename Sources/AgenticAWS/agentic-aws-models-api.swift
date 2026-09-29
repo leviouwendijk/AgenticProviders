@@ -32,10 +32,6 @@ public extension AgenticAWS {
         public func set() throws -> BedrockModelDiscoveryToolSet {
             try .resolve()
         }
-
-        public func provider() throws -> BedrockModelDiscoveryToolProvider {
-            try .resolve()
-        }
     }
 
     struct ModelProfileAPI: Sendable {
@@ -66,7 +62,7 @@ public extension AgenticAWS {
         public func catalog(
             options: BedrockModelDiscoveryOptions = .default,
             request: AgentModelProfileDiscoveryRequest = .manual
-        ) async throws -> AgentModelProfileCatalog {
+        ) async throws -> ProfileCatalog {
             try await .init(
                 snapshot: snapshot(
                     options: options,

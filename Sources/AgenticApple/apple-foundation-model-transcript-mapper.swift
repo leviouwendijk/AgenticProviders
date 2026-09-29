@@ -40,7 +40,7 @@ package enum AppleFoundationModelTranscriptMapper {
         }
 
         let prompt: String
-        let historyMessages: [AgentMessage]
+        let historyMessages: [Message]
 
         switch latestMessage.role {
         case .user:
@@ -77,7 +77,7 @@ package enum AppleFoundationModelTranscriptMapper {
                     continue
                 }
 
-                toolNamesByCallID[call.id] = call.name
+                toolNamesByCallID[call.id] = call.tool.rawValue
             }
         }
 
@@ -178,7 +178,7 @@ package enum AppleFoundationModelTranscriptMapper {
                     calls.append(
                         Transcript.ToolCall(
                             id: call.id,
-                            toolName: call.name,
+                            toolName: call.tool.rawValue,
                             arguments: try GeneratedContent(
                                 json: try json(call.input)
                             )
@@ -203,7 +203,7 @@ package enum AppleFoundationModelTranscriptMapper {
                         continue
                     }
 
-                    guard let toolName = result.name
+                    guard let toolName = result.tool?.rawValue
                         ?? toolNamesByCallID[result.toolCallID]
                     else {
                         throw AppleFoundationModelError.generationFailed(
@@ -245,7 +245,7 @@ package enum AppleFoundationModelTranscriptMapper {
 @available(macOS 26.0, *)
 private extension AppleFoundationModelTranscriptMapper {
     static func text(
-        in message: AgentMessage
+        in message: Message
     ) -> String {
         message.content.blocks.compactMap { block in
             guard case .text(let value) = block else {
@@ -275,7 +275,7 @@ private extension AppleFoundationModelTranscriptMapper {
     }
 
     static func toolOutputText(
-        _ result: AgentToolResult
+        _ result: ToolResult
     ) throws -> String {
         let output = try json(
             result.output

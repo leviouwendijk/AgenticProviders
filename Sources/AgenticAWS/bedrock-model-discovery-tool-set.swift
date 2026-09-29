@@ -1,5 +1,7 @@
 import Agentic
-import AgenticExecution
+
+import Workspace
+
 import Foundation
 import Schema
 import Macros
@@ -41,6 +43,7 @@ public struct BedrockListModelHandlesToolInput: Sendable, Codable, Hashable {
     }
 }
 
+@JSONSchema
 public struct BedrockListModelHandlesToolOutput: Sendable, Codable, Hashable {
     public var region: String
     public var count: Int
@@ -94,7 +97,7 @@ public struct BedrockListDiscoveredProfilesToolInput: Sendable, Codable, Hashabl
     }
 }
 
-public struct BedrockListDiscoveredProfilesToolOutput: Sendable, Codable, Hashable {
+public struct BedrockListDiscoveredProfilesToolOutput: Sendable, Codable, Hashable, JSONSchemaProviding {
     public var region: String
     public var handleCount: Int
     public var profileCount: Int
@@ -113,6 +116,45 @@ public struct BedrockListDiscoveredProfilesToolOutput: Sendable, Codable, Hashab
         self.profileCount = profileCount
         self.handles = handles
         self.profiles = profiles
+    }
+
+    public static var jsonschema: JSONSchema {
+        .object(
+            properties: [
+                .init(
+                    name: "region",
+                    schema: .string(),
+                    required: true
+                ),
+                .init(
+                    name: "handleCount",
+                    schema: .integer(),
+                    required: true
+                ),
+                .init(
+                    name: "profileCount",
+                    schema: .integer(),
+                    required: true
+                ),
+                .init(
+                    name: "handles",
+                    schema: .array(
+                        items: BedrockModelHandle.jsonschema
+                    ),
+                    required: true
+                ),
+                .init(
+                    name: "profiles",
+                    schema: .array(
+                        items: .object(
+                            additionalProperties: .allowed
+                        )
+                    ),
+                    required: true
+                ),
+            ],
+            additionalProperties: .disallowed
+        )
     }
 }
 
@@ -156,6 +198,7 @@ public struct BedrockResolveModelHandleToolInput: Sendable, Codable, Hashable {
     }
 }
 
+@JSONSchema
 public struct BedrockResolveModelHandleToolOutput: Sendable, Codable, Hashable {
     public var query: String
     public var matchCount: Int
@@ -172,7 +215,7 @@ public struct BedrockResolveModelHandleToolOutput: Sendable, Codable, Hashable {
     }
 }
 
-public struct BedrockModelDiscoveryToolSet: AgentToolSet {
+public struct BedrockModelDiscoveryToolSet: Sendable {
     public var discovery: BedrockModelDiscovery
 
     public init(
@@ -187,36 +230,54 @@ public struct BedrockModelDiscoveryToolSet: AgentToolSet {
         )
     }
 
-    public func register(
-        into registry: inout ToolRegistry
-    ) throws {
-        try registry.register {
-            BedrockListModelHandlesTool(
-                discovery: discovery
-            )
-            BedrockListDiscoveredProfilesTool(
-                discovery: discovery
-            )
-            BedrockResolveModelHandleTool(
-                discovery: discovery
-            )
-        }
+    public var listModelHandles: BedrockListModelHandlesTool {
+        .init(
+            discovery: discovery
+        )
+    }
+
+    public var listDiscoveredProfiles: BedrockListDiscoveredProfilesTool {
+        .init(
+            discovery: discovery
+        )
+    }
+
+    public var resolveModelHandle: BedrockResolveModelHandleTool {
+        .init(
+            discovery: discovery
+        )
+    }
+
+    public var definitions: [ToolDefinition] {
+        [
+            BedrockListModelHandlesTool.definition,
+            BedrockListDiscoveredProfilesTool.definition,
+            BedrockResolveModelHandleTool.definition,
+        ]
     }
 }
 
-private struct BedrockListModelHandlesTool: AgentTool {
-    typealias Input = BedrockListModelHandlesToolInput
-    typealias Output = BedrockListModelHandlesToolOutput
+public struct BedrockListModelHandlesTool: Tool {
+    public typealias Input = BedrockListModelHandlesToolInput
+    public typealias Output = BedrockListModelHandlesToolOutput
 
-    let discovery: BedrockModelDiscovery
+    public static let definition = ToolDefinition(
+        identifier: "bedrock_list_model_handles",
+        purpose: "List available AWS Bedrock model invocation handles from foundation models and inference profiles.",
+        risk: .observe
+    )
 
-    let identifier: AgentToolIdentifier = "bedrock_list_model_handles"
-    let description = "List available AWS Bedrock model invocation handles from foundation models and inference profiles."
-    let risk: ActionRisk = .observe
+    public let discovery: BedrockModelDiscovery
 
-    func call(
+    public init(
+        discovery: BedrockModelDiscovery
+    ) {
+        self.discovery = discovery
+    }
+
+    public func call(
         _ input: Input,
-        context _: AgentToolExecutionContext
+        workspace _: WorkspaceContext?
     ) async throws -> Output {
         let handles = try await discovery.handles(
             options: input.options
@@ -230,19 +291,27 @@ private struct BedrockListModelHandlesTool: AgentTool {
     }
 }
 
-private struct BedrockListDiscoveredProfilesTool: AgentTool {
-    typealias Input = BedrockListDiscoveredProfilesToolInput
-    typealias Output = BedrockListDiscoveredProfilesToolOutput
+public struct BedrockListDiscoveredProfilesTool: Tool {
+    public typealias Input = BedrockListDiscoveredProfilesToolInput
+    public typealias Output = BedrockListDiscoveredProfilesToolOutput
 
-    let discovery: BedrockModelDiscovery
+    public static let definition = ToolDefinition(
+        identifier: "bedrock_list_discovered_profiles",
+        purpose: "List Agentic model profiles synthesized from AWS Bedrock model discovery.",
+        risk: .observe
+    )
 
-    let identifier: AgentToolIdentifier = "bedrock_list_discovered_profiles"
-    let description = "List Agentic model profiles synthesized from AWS Bedrock model discovery."
-    let risk: ActionRisk = .observe
+    public let discovery: BedrockModelDiscovery
 
-    func call(
+    public init(
+        discovery: BedrockModelDiscovery
+    ) {
+        self.discovery = discovery
+    }
+
+    public func call(
         _ input: Input,
-        context _: AgentToolExecutionContext
+        workspace _: WorkspaceContext?
     ) async throws -> Output {
         let handles = try await discovery.handles(
             options: input.options
@@ -261,19 +330,27 @@ private struct BedrockListDiscoveredProfilesTool: AgentTool {
     }
 }
 
-private struct BedrockResolveModelHandleTool: AgentTool {
-    typealias Input = BedrockResolveModelHandleToolInput
-    typealias Output = BedrockResolveModelHandleToolOutput
+public struct BedrockResolveModelHandleTool: Tool {
+    public typealias Input = BedrockResolveModelHandleToolInput
+    public typealias Output = BedrockResolveModelHandleToolOutput
 
-    let discovery: BedrockModelDiscovery
+    public static let definition = ToolDefinition(
+        identifier: "bedrock_resolve_model_handle",
+        purpose: "Find Bedrock model handles matching an invocation id, title, provider, source model id, or ARN substring.",
+        risk: .observe
+    )
 
-    let identifier: AgentToolIdentifier = "bedrock_resolve_model_handle"
-    let description = "Find Bedrock model handles matching an invocation id, title, provider, source model id, or ARN substring."
-    let risk: ActionRisk = .observe
+    public let discovery: BedrockModelDiscovery
 
-    func call(
+    public init(
+        discovery: BedrockModelDiscovery
+    ) {
+        self.discovery = discovery
+    }
+
+    public func call(
         _ input: Input,
-        context _: AgentToolExecutionContext
+        workspace _: WorkspaceContext?
     ) async throws -> Output {
         let query = input.query.trimmingCharacters(
             in: .whitespacesAndNewlines

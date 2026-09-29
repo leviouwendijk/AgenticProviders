@@ -5,7 +5,7 @@ import Primitives
 
 enum BedrockToolMapper {
     static func map(
-        _ tools: [AgentToolDefinition]
+        _ tools: [ToolDescriptor]
     ) -> Bedrock.Converse.ToolConfig? {
         guard !tools.isEmpty else {
             return nil
@@ -17,7 +17,7 @@ enum BedrockToolMapper {
     }
 
     static func map(
-        _ definition: AgentToolDefinition
+        _ definition: ToolDescriptor
     ) -> Bedrock.Converse.Tool {
         .toolSpec(
             .init(
@@ -31,17 +31,17 @@ enum BedrockToolMapper {
     }
 
     static func map(
-        _ call: AgentToolCall
+        _ call: ToolCall
     ) -> Bedrock.Converse.ToolUse {
         .init(
             toolUseId: call.id,
-            name: call.name,
+            name: call.tool.rawValue,
             input: call.input
         )
     }
 
     static func map(
-        _ result: AgentToolResult
+        _ result: ToolResult
     ) -> Bedrock.Converse.ToolResult {
         .init(
             toolUseId: result.toolCallID,

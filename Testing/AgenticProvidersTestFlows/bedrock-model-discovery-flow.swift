@@ -5,7 +5,7 @@ import AWSConnector
 import TestFlows
 
 extension AgenticProvidersFlowTesting {
-    static func runBedrockModelHandleProfileSynthesis() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockModelHandleProfileSynthesis() async throws -> [TestDiagnostic] {
         let handle = bedrockFixtureHandles()[0]
         let profile = BedrockModelProfiles.profile(
             handle: handle,
@@ -98,7 +98,7 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runBedrockNonStreamingHandleDropsStreamingCapability() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockNonStreamingHandleDropsStreamingCapability() async throws -> [TestDiagnostic] {
         let handle = BedrockModelHandle(
             invokeIdentifier: "anthropic.claude-legacy-text-v1",
             kind: .foundation_model,
@@ -167,7 +167,7 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runBedrockGenericSnapshotProviderCatalog() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockGenericSnapshotProviderCatalog() async throws -> [TestDiagnostic] {
         let profiles = bedrockFixtureHandles().map { handle in
             BedrockModelProfiles.profile(
                 handle: handle,
@@ -196,7 +196,7 @@ extension AgenticProvidersFlowTesting {
         )
         let provider = snapshot.provider
         let providedProfiles = try provider.profiles()
-        let catalog = try AgentModelProfileCatalog(
+        let catalog = try ProfileCatalog(
             snapshot: snapshot
         )
         let selected = try catalog.profile(
@@ -244,86 +244,59 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runBedrockDiscoveryToolRegistration() async throws -> [TestFlowDiagnostic] {
-        let discovery = BedrockModelDiscovery(
-            control: bedrockFixtureClient()
+    static func runBedrockDiscoveryToolRegistration() async throws -> [TestDiagnostic] {
+        let tools = BedrockModelDiscoveryToolSet(
+            discovery: BedrockModelDiscovery(
+                control: bedrockFixtureClient()
+            )
         )
 
-        let directRegistry = try Agentic.tool.registry(
-            toolSets: [
-                BedrockModelDiscoveryToolSet(
-                    discovery: discovery
-                )
-            ]
-        )
-
-        let providerRegistry = try Agentic.tool.registry(
-            toolProviders: [
-                BedrockModelDiscoveryToolProvider(
-                    discovery: discovery
-                )
-            ]
-        )
+        _ = tools.listModelHandles
+        _ = tools.listDiscoveredProfiles
+        _ = tools.resolveModelHandle
 
         let expectedNames = [
             "bedrock_list_discovered_profiles",
             "bedrock_list_model_handles",
-            "bedrock_resolve_model_handle"
+            "bedrock_resolve_model_handle",
         ]
+        let actualNames = tools.definitions
+            .map { definition in
+                definition.identifier.rawValue
+            }
+            .sorted()
 
-        // Registry totals currently include Agentic intrinsic tools in addition
-        // to this Bedrock tool set. Keep validating the named Bedrock tools
-        // below without coupling this flow to the global intrinsic count.
-        //
-        // try Expect.equal(
-        //     directRegistry.count,
-        //     expectedNames.count,
-        //     "direct tool set registry count"
-        // )
-        // try Expect.equal(
-        //     providerRegistry.count,
-        //     expectedNames.count,
-        //     "tool provider registry count"
-        // )
+        try Expect.equal(
+            actualNames,
+            expectedNames.sorted(),
+            "Bedrock discovery tool bundle exposes the expected core Tool definitions"
+        )
 
-        for name in expectedNames {
-            try Expect.notNil(
-                directRegistry.registeredTool(
-                    named: name
-                ),
-                "direct registry contains \(name)"
-            )
-            try Expect.notNil(
-                providerRegistry.registeredTool(
-                    named: name
-                ),
-                "provider registry contains \(name)"
+        for definition in tools.definitions {
+            try Expect.equal(
+                definition.risk,
+                .observe,
+                "Bedrock discovery tools remain observe-only"
             )
         }
 
         return [
             .field(
-                "direct_registry_count",
+                "tool_count",
                 String(
-                    directRegistry.count
-                )
-            ),
-            .field(
-                "provider_registry_count",
-                String(
-                    providerRegistry.count
+                    tools.definitions.count
                 )
             ),
             .field(
                 "tools",
-                expectedNames.joined(
+                actualNames.joined(
                     separator: ","
                 )
             )
         ]
     }
 
-    static func runBedrockLiveNestedProfileAPI() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockLiveNestedProfileAPI() async throws -> [TestDiagnostic] {
         try TestFlowSkip.unless(
             bedrockCanResolveAWSConfiguration(),
             "AWS credentials/region are unavailable for live Bedrock discovery."
@@ -350,7 +323,7 @@ extension AgenticProvidersFlowTesting {
             options: options
         )
         let profiles = try provider.profiles()
-        let catalog = try AgentModelProfileCatalog(
+        let catalog = try ProfileCatalog(
             providers: [
                 provider
             ]

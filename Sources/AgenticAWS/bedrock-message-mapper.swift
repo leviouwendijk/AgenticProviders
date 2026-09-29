@@ -3,7 +3,7 @@ import AWSConnector
 
 enum BedrockMessageMapper {
     static func map(
-        _ messages: [AgentMessage]
+        _ messages: [Message]
     ) throws -> (
         system: [Bedrock.Converse.SystemBlock],
         messages: [Bedrock.Converse.Message]
@@ -53,7 +53,7 @@ enum BedrockMessageMapper {
 
 private extension BedrockMessageMapper {
     static func systemBlocks(
-        _ message: AgentMessage
+        _ message: Message
     ) throws -> [Bedrock.Converse.SystemBlock] {
         let blocks = try message.content.blocks.map { block in
             guard case .text(let text) = block else {
@@ -77,7 +77,7 @@ private extension BedrockMessageMapper {
     }
 
     static func messageBlock(
-        _ message: AgentMessage,
+        _ message: Message,
         role: Bedrock.Converse.Role
     ) throws -> Bedrock.Converse.Message {
         let content = try message.content.blocks.map { block in
@@ -100,7 +100,7 @@ private extension BedrockMessageMapper {
     }
 
     static func toolMessage(
-        _ message: AgentMessage
+        _ message: Message
     ) throws -> Bedrock.Converse.Message {
         let content = try message.content.blocks.map { block in
             guard case .tool_result(let result) = block else {
@@ -129,7 +129,7 @@ private extension BedrockMessageMapper {
     }
 
     static func appendToolMessage(
-        _ message: AgentMessage,
+        _ message: Message,
         to mapped: inout [Bedrock.Converse.Message]
     ) throws {
         let next = try toolMessage(
@@ -167,8 +167,8 @@ private extension BedrockMessageMapper {
     }
 
     static func contentBlock(
-        _ block: AgentContentBlock,
-        role: AgentRole
+        _ block: MessageContentBlock,
+        role: MessageRole
     ) throws -> Bedrock.Converse.ContentBlock {
         switch block {
         case .text(let text):

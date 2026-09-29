@@ -10,20 +10,20 @@ import FoundationModels
 #endif
 
 private actor AppleFoundationModelToolResolverProbe:
-    AgentToolCallResolver
+    ToolCallResolver
 {
-    private var calls: [AgentToolCall] = []
+    private var calls: [ToolCall] = []
 
     func resolve(
-        _ call: AgentToolCall
-    ) async throws -> AgentToolResult {
+        _ call: ToolCall
+    ) async throws -> ToolResult {
         calls.append(
             call
         )
 
-        return AgentToolResult(
+        return ToolResult(
             toolCallID: call.id,
-            name: call.name,
+            tool: call.tool,
             output: .object([
                 "text": .string("let value = 42")
             ]),
@@ -31,13 +31,13 @@ private actor AppleFoundationModelToolResolverProbe:
         )
     }
 
-    func recordedCalls() -> [AgentToolCall] {
+    func recordedCalls() -> [ToolCall] {
         calls
     }
 }
 
 extension AgenticProvidersFlowTesting {
-    static func runApplePromptRendering() async throws -> [TestFlowDiagnostic] {
+    static func runApplePromptRendering() async throws -> [TestDiagnostic] {
         let request = AgentRequest(
             messages: [
                 .init(role: .system, text: "Answer briefly."),
@@ -89,8 +89,8 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runAppleToolBridge() async throws -> [TestFlowDiagnostic] {
-        let definition = AgentToolDefinition(
+    static func runAppleToolBridge() async throws -> [TestDiagnostic] {
+        let definition = ToolDescriptor(
             name: "read_file",
             description: "Read a UTF-8 file in the authorized workspace.",
             inputSchema: .object([
@@ -109,16 +109,16 @@ extension AgenticProvidersFlowTesting {
                 ])
             ])
         )
-        let priorCall = AgentToolCall(
+        let priorCall = ToolCall(
             id: "apple-tool-call",
-            name: "read_file",
+            tool: "read_file",
             input: .object([
                 "path": .string("Sources/example.swift")
             ])
         )
-        let priorResult = AgentToolResult(
+        let priorResult = ToolResult(
             toolCallID: priorCall.id,
-            name: priorCall.name,
+            tool: priorCall.tool,
             output: .object([
                 "text": .string("let value = 42")
             ]),
@@ -314,7 +314,7 @@ extension AgenticProvidersFlowTesting {
             }
 
             try Expect.equal(
-                resolvedCall.name,
+                resolvedCall.tool.rawValue,
                 "read_file",
                 "resolved Agentic tool name"
             )
@@ -333,7 +333,7 @@ extension AgenticProvidersFlowTesting {
 
             return [
                 ProviderFlowDiagnostics.input(request),
-                .field("tool", resolvedCall.name),
+                .field("tool", resolvedCall.tool.rawValue),
                 .field("native-continuation", "tool result returned"),
                 .section(
                     "rendered",
@@ -354,7 +354,7 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runAppleStructuredOutputLowering() async throws -> [TestFlowDiagnostic] {
+    static func runAppleStructuredOutputLowering() async throws -> [TestDiagnostic] {
         let schema = JSONSchema.object(
             properties: [
                 .init(

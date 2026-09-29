@@ -33,7 +33,7 @@ public enum AppleFoundationModelError: Error, Sendable, Equatable, LocalizedErro
             return "FoundationModels tool bridging is unavailable for: \(tools.joined(separator: ", "))."
 
         case .toolResolverUnavailable(let tools):
-            return "FoundationModels native tools require an AgentToolCallResolver: \(tools.joined(separator: ", "))."
+            return "FoundationModels native tools require an ToolCallResolver: \(tools.joined(separator: ", "))."
 
         case .toolSchemaUnsupported(let tool, let detail):
             return "FoundationModels cannot lower the input schema for tool '\(tool)': \(detail)"

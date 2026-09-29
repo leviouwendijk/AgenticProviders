@@ -4,8 +4,8 @@ import Foundation
 public enum BedrockGatewayError: Error, Sendable, LocalizedError {
     case emptyMessages
     case emptyMappedMessages
-    case emptyContent(AgentRole)
-    case unsupportedContent(AgentRole)
+    case emptyContent(MessageRole)
+    case unsupportedContent(MessageRole)
     case unsupportedResource(id: String, modality: AgentModality)
     case invalidToolInput(id: String, input: String)
     case streamError(type: String, message: String?)

@@ -4,7 +4,7 @@ import TestFlows
 enum ProviderFlowDiagnostics {
     static func input(
         _ request: AgentRequest
-    ) -> TestFlowDiagnostic {
+    ) -> TestDiagnostic {
         .section(
             "input",
             requestLines(
@@ -15,7 +15,7 @@ enum ProviderFlowDiagnostics {
 
     static func output(
         _ response: AgentResponse
-    ) -> TestFlowDiagnostic {
+    ) -> TestDiagnostic {
         .section(
             "output",
             responseLines(
@@ -26,7 +26,7 @@ enum ProviderFlowDiagnostics {
 
     static func stream(
         _ events: [AgentStreamEvent]
-    ) -> TestFlowDiagnostic {
+    ) -> TestDiagnostic {
         .section(
             "stream",
             streamLines(
@@ -73,10 +73,10 @@ private extension ProviderFlowDiagnostics {
                 return "delta: \(block)"
 
             case .toolcall(let call):
-                return "toolcall: \(call.name) id=\(call.id) input=\(call.input)"
+                return "toolcall: \(call.tool.rawValue) id=\(call.id) input=\(call.input)"
 
             case .toolresult(let result):
-                return "toolresult: \(result.name ?? "<nil>") id=\(result.toolCallID) output=\(result.output)"
+                return "toolresult: \(result.tool?.rawValue ?? "<nil>") id=\(result.toolCallID) output=\(result.output)"
 
             case .completed(let response):
                 return "completed: \(response.message.content.text)"

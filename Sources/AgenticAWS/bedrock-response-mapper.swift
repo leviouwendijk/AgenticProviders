@@ -13,7 +13,7 @@ enum BedrockResponseMapper {
             message = value
         }
 
-        let role: AgentRole
+        let role: MessageRole
         switch message.role {
         case .user:
             role = .user
@@ -55,17 +55,19 @@ enum BedrockResponseMapper {
 private extension BedrockResponseMapper {
     static func map(
         _ block: Bedrock.Converse.ContentBlock,
-        role: AgentRole
-    ) throws -> AgentContentBlock {
+        role: MessageRole
+    ) throws -> MessageContentBlock {
         switch block {
         case .text(let text):
             return .text(text)
 
         case .toolUse(let toolUse):
             return .tool_call(
-                AgentToolCall(
+                ToolCall(
                     id: toolUse.toolUseId,
-                    name: toolUse.name,
+                    tool: ToolIdentifier(
+                        rawValue: toolUse.name
+                    ),
                     input: toolUse.input
                 )
             )

@@ -6,7 +6,7 @@ import TestFlows
 extension AgenticProvidersFlowTesting {
     static func runOllamaMissingConfigurationAvailability()
         async throws
-        -> [TestFlowDiagnostic]
+        -> [TestDiagnostic]
     {
         let symbol =
             "AGENTIC_TEST_MISSING_OLLAMA_ENDPOINT_\(UUID().uuidString)"

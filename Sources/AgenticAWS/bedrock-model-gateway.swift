@@ -70,7 +70,7 @@ public struct BedrockModelGateway: AgentModelGateway {
         metadata: [String: String] = [:],
         diagnostics: BedrockDiagnostics = .disabled
     ) throws -> Self {
-        try .init(
+        .init(
             identifier: identifier,
             runtime: BedrockRuntimeClient(
                 region: region,

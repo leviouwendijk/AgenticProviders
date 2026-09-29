@@ -5,10 +5,10 @@ import TestFlows
 
 extension AgenticProvidersFlowTesting {
     static func runAppleModelProviderCatalogRealization()
-        async throws -> [TestFlowDiagnostic]
+        async throws -> [TestDiagnostic]
     {
         let provider = AppleFoundationModelProvider()
-        let catalogs = try await AgentModelCatalogs(
+        let catalogs = try await ModelCatalogs(
             modelProviders: [
                 provider,
             ]

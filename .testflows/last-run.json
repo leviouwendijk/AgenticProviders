@@ -1,0 +1,215 @@
+{
+  "failed" : 0,
+  "failed_names" : [
+
+  ],
+  "generated_at" : "2026-09-29T23:00:35Z",
+  "passed" : 16,
+  "results" : [
+    {
+      "display_name" : "apple-prompt-rendering",
+      "duration_seconds" : 0.00046706199645996094,
+      "name" : "apple-prompt-rendering",
+      "status" : "passed",
+      "tags" : [
+        "apple",
+        "foundation-models",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "apple-tool-bridge",
+      "duration_seconds" : 0.01699995994567871,
+      "name" : "apple-tool-bridge",
+      "status" : "passed",
+      "tags" : [
+        "apple",
+        "foundation-models",
+        "offline",
+        "tool-use"
+      ]
+    },
+    {
+      "display_name" : "apple-structured-output-lowering",
+      "duration_seconds" : 0.00032401084899902344,
+      "name" : "apple-structured-output-lowering",
+      "status" : "passed",
+      "tags" : [
+        "apple",
+        "foundation-models",
+        "offline",
+        "structured-output"
+      ]
+    },
+    {
+      "display_name" : "apple-model-provider-catalog-realization",
+      "duration_seconds" : 0.00030791759490966797,
+      "name" : "apple-model-provider-catalog-realization",
+      "status" : "passed",
+      "tags" : [
+        "apple",
+        "foundation-models",
+        "model-provider",
+        "model-routing",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "ollama-missing-configuration-availability",
+      "duration_seconds" : 0.00028705596923828125,
+      "name" : "ollama-missing-configuration-availability",
+      "status" : "passed",
+      "tags" : [
+        "availability",
+        "gateway",
+        "model-provider",
+        "offline",
+        "ollama"
+      ]
+    },
+    {
+      "display_name" : "bedrock-model-provider-catalog-realization",
+      "duration_seconds" : 0.00010097026824951172,
+      "name" : "bedrock-model-provider-catalog-realization",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "model-provider",
+        "model-routing",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "bedrock-multiple-gateway-provider-realization",
+      "duration_seconds" : 3.504753112792969e-05,
+      "name" : "bedrock-multiple-gateway-provider-realization",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "gateway",
+        "model-provider",
+        "multiple-gateways",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "bedrock-buffered-stream-completion",
+      "duration_seconds" : 0.0003279447555541992,
+      "name" : "bedrock-buffered-stream-completion",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "offline",
+        "stream"
+      ]
+    },
+    {
+      "display_name" : "bedrock-tool-use-stream",
+      "duration_seconds" : 0.0007979869842529297,
+      "name" : "bedrock-tool-use-stream",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "offline",
+        "stream",
+        "tool-use"
+      ]
+    },
+    {
+      "display_name" : "bedrock-tool-result-mapping",
+      "duration_seconds" : 9.703636169433594e-05,
+      "name" : "bedrock-tool-result-mapping",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "offline",
+        "tool-use"
+      ]
+    },
+    {
+      "display_name" : "bedrock-model-handle-profile-synthesis",
+      "duration_seconds" : 7.49826431274414e-05,
+      "name" : "bedrock-model-handle-profile-synthesis",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "model-discovery",
+        "model-routing",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "bedrock-non-streaming-handle-drops-streaming-capability",
+      "duration_seconds" : 9.09566879272461e-05,
+      "name" : "bedrock-non-streaming-handle-drops-streaming-capability",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "model-discovery",
+        "model-routing",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "bedrock-generic-snapshot-provider-catalog",
+      "duration_seconds" : 6.103515625e-05,
+      "name" : "bedrock-generic-snapshot-provider-catalog",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "model-discovery",
+        "model-routing",
+        "offline"
+      ]
+    },
+    {
+      "display_name" : "bedrock-discovery-tool-registration",
+      "duration_seconds" : 0.004441976547241211,
+      "name" : "bedrock-discovery-tool-registration",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "model-discovery",
+        "offline",
+        "tools"
+      ]
+    },
+    {
+      "display_name" : "bedrock-structured-output-lowering",
+      "duration_seconds" : 0.00012803077697753906,
+      "name" : "bedrock-structured-output-lowering",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "offline",
+        "structured-output"
+      ]
+    },
+    {
+      "display_name" : "bedrock-live-nested-profile-api",
+      "duration_seconds" : 7.031763911247253,
+      "name" : "bedrock-live-nested-profile-api",
+      "status" : "passed",
+      "tags" : [
+        "aws",
+        "bedrock",
+        "live",
+        "model-discovery",
+        "model-routing"
+      ]
+    }
+  ],
+  "skipped" : 0,
+  "title" : "AgenticProviders flow tests",
+  "total" : 16
+}

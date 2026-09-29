@@ -1,5 +1,8 @@
 import AWSConnector
+import Macros
+import Schema
 
+@JSONSchema
 public enum BedrockModelHandleKind: String, Sendable, Codable, Hashable, CaseIterable {
     case foundation_model
     case system_inference_profile
@@ -7,6 +10,7 @@ public enum BedrockModelHandleKind: String, Sendable, Codable, Hashable, CaseIte
     case inference_profile
 }
 
+@JSONSchema
 public struct BedrockModelHandle: Sendable, Codable, Hashable, Identifiable {
     public var id: String {
         invokeIdentifier

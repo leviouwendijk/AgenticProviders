@@ -18,7 +18,7 @@ enum AgenticGatewaySemanticStreamingNotes {
 
      Candidate future shapes:
      - AgentStreamEvent.reasoningDelta(String)
-     - AgentContentBlock.reasoning(String)
-     - AgentContentBlock.annotation(kind:source:text:)
+     - MessageContentBlock.reasoning(String)
+     - MessageContentBlock.annotation(kind:source:text:)
      */
 }

@@ -6,7 +6,7 @@ import TestFlows
 
 extension AgenticProvidersFlowTesting {
     static func runBedrockModelProviderCatalogRealization()
-        async throws -> [TestFlowDiagnostic]
+        async throws -> [TestDiagnostic]
     {
         let model = "eu.anthropic.claude-sonnet-4-6"
         let profileID: AgentModelProfileIdentifier =
@@ -22,7 +22,7 @@ extension AgenticProvidersFlowTesting {
                 ),
             ]
         )
-        let catalogs = try await AgentModelCatalogs(
+        let catalogs = try await ModelCatalogs(
             modelProviders: [
                 provider,
             ]
@@ -77,7 +77,7 @@ extension AgenticProvidersFlowTesting {
     }
 
     static func runBedrockMultipleGatewayProviderRealization()
-        async throws -> [TestFlowDiagnostic]
+        async throws -> [TestDiagnostic]
     {
         let primaryGatewayIdentifier =
             AgentModelGatewayIdentifier.aws_bedrock_us_east_1
@@ -117,7 +117,7 @@ extension AgenticProvidersFlowTesting {
             ]
         )
 
-        let catalogs = try await AgentModelCatalogs(
+        let catalogs = try await ModelCatalogs(
             modelProviders: [
                 provider,
             ]

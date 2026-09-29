@@ -9,7 +9,7 @@ public enum OllamaGatewayError:
     case invalidEndpoint(String)
     case emptyMessages
     case emptyMappedMessages
-    case unsupportedContent(AgentRole)
+    case unsupportedContent(MessageRole)
     case missingToolName(String)
     case missingTLSCACertificateConfiguration(
         symbol: String

@@ -34,7 +34,7 @@ public enum AppleFoundationModelPromptRenderer {
 
 private extension AppleFoundationModelPromptRenderer {
     static func render(
-        _ message: AgentMessage
+        _ message: Message
     ) throws -> String {
         let body = try message.content.blocks.compactMap { block in
             try render(block)
@@ -53,7 +53,7 @@ private extension AppleFoundationModelPromptRenderer {
     }
 
     static func heading(
-        for role: AgentRole
+        for role: MessageRole
     ) -> String {
         switch role {
         case .system:
@@ -71,7 +71,7 @@ private extension AppleFoundationModelPromptRenderer {
     }
 
     static func render(
-        _ block: AgentContentBlock
+        _ block: MessageContentBlock
     ) throws -> String? {
         switch block {
         case .text(let value):
@@ -85,12 +85,12 @@ private extension AppleFoundationModelPromptRenderer {
 
         case .tool_call(let call):
             return """
-            Prior tool request: \(call.name)
+            Prior tool request: \(call.tool.rawValue)
             Input: \(try json(call.input))
             """
 
         case .tool_result(let result):
-            let name = result.name ?? "unknown tool"
+            let name = result.tool?.rawValue ?? "unknown tool"
             let status = result.isError
                 ? "error"
                 : "success"

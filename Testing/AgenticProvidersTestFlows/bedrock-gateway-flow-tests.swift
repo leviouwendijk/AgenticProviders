@@ -7,7 +7,7 @@ import Schema
 import TestFlows
 
 extension AgenticProvidersFlowTesting {
-    static func runBedrockBufferedStreamCompletion() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockBufferedStreamCompletion() async throws -> [TestDiagnostic] {
         let runtime = BedrockFlowRuntime(
             responses: [
                 BedrockFlowFixture.response(
@@ -124,7 +124,7 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runBedrockToolUseStream() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockToolUseStream() async throws -> [TestDiagnostic] {
         let runtime = BedrockFlowRuntime(
             batches: [
                 BedrockFlowFixture.toolUse(
@@ -179,7 +179,7 @@ extension AgenticProvidersFlowTesting {
             "tool id"
         )
         try Expect.equal(
-            call.name,
+            call.tool.rawValue,
             "gateway_scratchpad_put",
             "tool name"
         )
@@ -211,7 +211,7 @@ extension AgenticProvidersFlowTesting {
         ]
     }
 
-    static func runBedrockToolResultMapping() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockToolResultMapping() async throws -> [TestDiagnostic] {
         let runtime = BedrockFlowRuntime(
             responses: [
                 BedrockFlowFixture.response(
@@ -231,7 +231,7 @@ extension AgenticProvidersFlowTesting {
                             .tool_result(
                                 .init(
                                     toolCallID: "tool-1",
-                                    name: "gateway_scratchpad_put",
+                                    tool: "gateway_scratchpad_put",
                                     output: .object([
                                         "ok": .bool(true)
                                     ])
@@ -240,7 +240,7 @@ extension AgenticProvidersFlowTesting {
                             .tool_result(
                                 .init(
                                     toolCallID: "tool-2",
-                                    name: "fixture_tool",
+                                    tool: "fixture_tool",
                                     output: .object([
                                         "kind": .string("tool_error"),
                                         "message": .string("Edit line payload contains newline characters and is not a single logical line.")
@@ -327,7 +327,7 @@ extension AgenticProvidersFlowTesting {
 }
 
 extension AgenticProvidersFlowTesting {
-    static func runBedrockStructuredOutputLowering() async throws -> [TestFlowDiagnostic] {
+    static func runBedrockStructuredOutputLowering() async throws -> [TestDiagnostic] {
         let runtime = BedrockFlowRuntime(
             responses: [
                 BedrockFlowFixture.response(
@@ -696,8 +696,8 @@ private enum BedrockFlowFixture {
 
 private func onlyToolCall(
     _ events: [AgentStreamEvent]
-) throws -> AgentToolCall {
-    let calls = events.compactMap { event -> AgentToolCall? in
+) throws -> ToolCall {
+    let calls = events.compactMap { event -> ToolCall? in
         guard case .toolcall(let call) = event else {
             return nil
         }

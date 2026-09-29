@@ -7,7 +7,7 @@ import FoundationModels
 
 
 @available(macOS 26.0, *)
-package struct AppleFoundationModelToolProxy: Tool {
+package struct AppleFoundationModelToolProxy: FoundationModels.Tool {
     package typealias Arguments = GeneratedContent
     package typealias Output = String
 
@@ -16,11 +16,11 @@ package struct AppleFoundationModelToolProxy: Tool {
     package let parameters: GenerationSchema
     package let includesSchemaInInstructions = true
 
-    private let resolver: any AgentToolCallResolver
+    private let resolver: any ToolCallResolver
 
     package init(
-        definition: AgentToolDefinition,
-        resolver: any AgentToolCallResolver
+        definition: ToolDescriptor,
+        resolver: any ToolCallResolver
     ) throws {
         self.name = definition.name
         self.description = definition.description
@@ -46,9 +46,11 @@ package struct AppleFoundationModelToolProxy: Tool {
         }
 
         let result = try await resolver.resolve(
-            AgentToolCall(
+            ToolCall(
                 id: UUID().uuidString,
-                name: name,
+                tool: ToolIdentifier(
+                    rawValue: name
+                ),
                 input: input
             )
         )
@@ -62,8 +64,8 @@ package struct AppleFoundationModelToolProxy: Tool {
 @available(macOS 26.0, *)
 package enum AppleFoundationModelToolBridge {
     package static func tools(
-        for definitions: [AgentToolDefinition],
-        resolver: any AgentToolCallResolver
+        for definitions: [ToolDescriptor],
+        resolver: any ToolCallResolver
     ) throws -> [AppleFoundationModelToolProxy] {
         try definitions.map { definition in
             try AppleFoundationModelToolProxy(
@@ -77,7 +79,7 @@ package enum AppleFoundationModelToolBridge {
 @available(macOS 26.0, *)
 package enum AppleFoundationModelToolOutputRenderer {
     package static func render(
-        _ result: AgentToolResult
+        _ result: ToolResult
     ) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [
@@ -108,7 +110,7 @@ package enum AppleFoundationModelToolOutputRenderer {
 @available(macOS 26.0, *)
 package enum AppleFoundationModelGenerationSchemaLowerer {
     package static func parameters(
-        for definition: AgentToolDefinition
+        for definition: ToolDescriptor
     ) throws -> GenerationSchema {
         let rootObject: [String: Any]
 
