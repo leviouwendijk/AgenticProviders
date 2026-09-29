@@ -35,6 +35,18 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
             try await AgenticProvidersFlowTesting.runOllamaMissingConfigurationAvailability()
         },
         TestFlow(
+            ID.hyai_missing_configuration_availability,
+            tags: ["hyai", "model-provider", "gateway", "availability", "offline"]
+        ) {
+            try await AgenticProvidersFlowTesting.runHYAIMissingConfigurationAvailability()
+        },
+        TestFlow(
+            ID.hyai_auto_profile_semantics,
+            tags: ["hyai", "model-provider", "model-routing", "offline"]
+        ) {
+            try await AgenticProvidersFlowTesting.runHYAIAutoProfileSemantics()
+        },
+        TestFlow(
             ID.bedrock_model_provider_catalog_realization,
             tags: ["aws", "bedrock", "model-provider", "model-routing", "offline"]
         ) {
@@ -110,6 +122,8 @@ extension AgenticProvidersFlowSuite {
         static let apple_structured_output_lowering = "apple-structured-output-lowering"
         static let apple_model_provider_catalog_realization = "apple-model-provider-catalog-realization"
         static let ollama_missing_configuration_availability = "ollama-missing-configuration-availability"
+        static let hyai_missing_configuration_availability = "hyai-missing-configuration-availability"
+        static let hyai_auto_profile_semantics = "hyai-auto-profile-semantics"
         static let bedrock_model_provider_catalog_realization = "bedrock-model-provider-catalog-realization"
         static let bedrock_multiple_gateway_provider_realization = "bedrock-multiple-gateway-provider-realization"
         static let bedrock_buffered_stream_completion = "bedrock-buffered-stream-completion"

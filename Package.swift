@@ -20,6 +20,10 @@ let package = Package(
             name: "AgenticOllama",
             targets: ["AgenticOllama"]
         ),
+        .library(
+            name: "AgenticHYAI",
+            targets: ["AgenticHYAI"]
+        ),
 
         // testing
         .executable(
@@ -68,6 +72,14 @@ let package = Package(
                 .product(name: "Cryptography", package: "Cryptography"),
             ]
         ),
+        .target(
+            name: "AgenticHYAI",
+            dependencies: [
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "Primitives", package: "Primitives"),
+                .product(name: "Milieu", package: "Milieu"),
+            ]
+        ),
 
         .executableTarget(
             name: "AgenticProvidersTestFlows",
@@ -75,6 +87,7 @@ let package = Package(
                 "AgenticApple",
                 "AgenticAWS",
                 "AgenticOllama",
+                "AgenticHYAI",
                 .product(name: "Agentic", package: "Agentic"),
                 .product(name: "AgenticModels", package: "AgenticModels"),
                 .product(name: "Primitives", package: "Primitives"),
