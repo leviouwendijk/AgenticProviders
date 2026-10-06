@@ -1,4 +1,5 @@
 import Agentic
+import AgenticModels
 
 public struct AppleFoundationModelProfileProvider: AgentModelProfileProvider {
     public var gatewayIdentifier: AgentModelGatewayIdentifier

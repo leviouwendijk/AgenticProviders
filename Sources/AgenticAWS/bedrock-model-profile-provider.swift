@@ -1,4 +1,5 @@
 import Agentic
+import AgenticModels
 
 public struct BedrockModelProfileProvider: AgentModelProfileProvider {
     public var gatewayIdentifier: AgentModelGatewayIdentifier

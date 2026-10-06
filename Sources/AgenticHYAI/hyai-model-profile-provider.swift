@@ -1,4 +1,5 @@
 import Agentic
+import AgenticModels
 
 public struct HYAIModelProfileProvider:
     AgentModelProfileProvider
@@ -21,6 +22,39 @@ public struct HYAIModelProfileProvider:
 
     public func profiles() throws -> [AgentModelProfile] {
         [
+            .init(
+                identifier: .hyai_glm_v5_3_flash,
+                gatewayIdentifier: gatewayIdentifier,
+                model: "zai-org/GLM-5.3-Flash",
+                modelID: KnownModel.glm.v5_3_flash,
+                title: "HostYourAI GLM 5.3 Flash",
+                purposes: [
+                    .executor,
+                    .planner,
+                    .researcher,
+                    .advisor,
+                    .reviewer,
+                    .summarizer,
+                    .classifier,
+                    .extractor,
+                    .coder,
+                ],
+                capabilities: [
+                    .text,
+                    .tool_use,
+                    .streaming,
+                ],
+                cost: .balanced,
+                latency: .medium,
+                privacy: .private_cloud,
+                limits: .unknown,
+                metadata: [
+                    "provider": "hostyourai",
+                    "gateway": "hyai_chat_completions",
+                    "virtual_model": "false",
+                    "hostyourai_model": "zai-org/GLM-5.3-Flash",
+                ]
+            ),
             .init(
                 identifier: profileIdentifier,
                 gatewayIdentifier: gatewayIdentifier,
@@ -63,4 +97,5 @@ public extension AgentModelGatewayIdentifier {
 
 public extension AgentModelProfileIdentifier {
     static let hyai_auto: Self = "hyai_auto"
+    static let hyai_glm_v5_3_flash: Self = "hyai_glm_v5_3_flash"
 }

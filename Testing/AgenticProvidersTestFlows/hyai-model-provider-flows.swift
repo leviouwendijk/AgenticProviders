@@ -1,5 +1,6 @@
 import Agentic
 import AgenticHYAI
+import AgenticModels
 import Foundation
 import TestFlows
 
@@ -69,17 +70,17 @@ extension AgenticProvidersFlowTesting {
             autoPolicy: .quality
         ).profiles()
 
-        guard profiles.count == 1,
-              let profile = profiles.first
-        else {
+        guard let profile = profiles.first(
+            where: { $0.identifier == .hyai_auto }
+        ) else {
             throw HYAIAvailabilityFixtureError
-                .expectedOneProfile
+                .expectedAutoProfile
         }
 
         try Expect.equal(
             profile.identifier,
             .hyai_auto,
-            "HostYourAI contributes one virtual auto profile"
+            "HostYourAI retains an explicitly addressable virtual auto profile"
         )
         try Expect.equal(
             profile.gateway.id,
@@ -157,6 +158,99 @@ extension AgenticProvidersFlowTesting {
             ),
         ]
     }
+
+    static func runHYAIExplicitModelProfileSemantics()
+        async throws
+        -> [TestDiagnostic]
+    {
+        let profiles = try HYAIModelProfileProvider().profiles()
+        let catalog = try ProfileCatalog(
+            profiles: profiles
+        )
+
+        let matchingProfiles = catalog.profiles(
+            for: KnownModel.glm.v5_3_flash
+        )
+
+        try Expect.equal(
+            matchingProfiles.count,
+            1,
+            "HostYourAI contributes exactly one profile for canonical GLM 5.3 Flash"
+        )
+
+        let selection = AgentModelSelection.exactModel(
+            KnownModel.glm.v5_3_flash,
+            through: .hyai
+        )
+
+        let result = try StaticModelRouter().route(
+            .init(
+                selection: selection
+            ),
+            catalog: catalog
+        )
+
+        try Expect.equal(
+            result.route.profile.identifier,
+            .hyai_glm_v5_3_flash,
+            "exact GLM selection resolves to the concrete HostYourAI profile"
+        )
+        try Expect.equal(
+            result.route.profile.modelID,
+            KnownModel.glm.v5_3_flash,
+            "resolved HostYourAI profile retains the canonical model identity"
+        )
+        try Expect.equal(
+            result.route.profile.model,
+            "zai-org/GLM-5.3-Flash",
+            "resolved HostYourAI profile retains the gateway-native physical model identifier"
+        )
+        try Expect.equal(
+            result.route.profile.gateway.id,
+            .hyai,
+            "resolved physical model routes through the HostYourAI gateway"
+        )
+
+        let autoProfiles = profiles.filter {
+            $0.identifier == .hyai_auto
+        }
+        let autoOnlyCatalog = try ProfileCatalog(
+            profiles: autoProfiles
+        )
+
+        do {
+            _ = try StaticModelRouter().route(
+                .init(
+                    selection: selection
+                ),
+                catalog: autoOnlyCatalog
+            )
+
+            throw HYAIAvailabilityFixtureError
+                .expectedFailClosedRouting
+        } catch AgentModelRoutingError.noRoute(let purpose) {
+            try Expect.equal(
+                purpose,
+                .executor,
+                "exact physical model selection fails closed when the physical profile is unavailable"
+            )
+        }
+
+        return [
+            .field(
+                "canonical_model",
+                KnownModel.glm.v5_3_flash.rawValue
+            ),
+            .field(
+                "profile",
+                result.route.profile.identifier.rawValue
+            ),
+            .field(
+                "wire_model",
+                result.route.profile.model
+            ),
+        ]
+    }
 }
 
 private enum HYAIAvailabilityFixtureError:
@@ -164,5 +258,6 @@ private enum HYAIAvailabilityFixtureError:
 {
     case missingFactory
     case expectedUnavailable
-    case expectedOneProfile
+    case expectedAutoProfile
+    case expectedFailClosedRouting
 }
