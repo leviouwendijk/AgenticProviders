@@ -1,7 +1,5 @@
 import Agentic
 
-import Workspace
-
 import Foundation
 import Schema
 import Macros
@@ -277,7 +275,7 @@ public struct BedrockListModelHandlesTool: Tool {
 
     public func call(
         _ input: Input,
-        workspace _: WorkspaceContext?
+        in _: ToolContext
     ) async throws -> Output {
         let handles = try await discovery.handles(
             options: input.options
@@ -311,7 +309,7 @@ public struct BedrockListDiscoveredProfilesTool: Tool {
 
     public func call(
         _ input: Input,
-        workspace _: WorkspaceContext?
+        in _: ToolContext
     ) async throws -> Output {
         let handles = try await discovery.handles(
             options: input.options
@@ -350,7 +348,7 @@ public struct BedrockResolveModelHandleTool: Tool {
 
     public func call(
         _ input: Input,
-        workspace _: WorkspaceContext?
+        in _: ToolContext
     ) async throws -> Output {
         let query = input.query.trimmingCharacters(
             in: .whitespacesAndNewlines
