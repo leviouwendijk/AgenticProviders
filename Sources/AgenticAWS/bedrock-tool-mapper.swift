@@ -24,7 +24,7 @@ enum BedrockToolMapper {
                 name: definition.name,
                 description: definition.description,
                 inputSchema: .init(
-                    json: definition.inputSchema ?? defaultSchema
+                    json: definition.input ?? defaultSchema
                 )
             )
         )
@@ -41,10 +41,10 @@ enum BedrockToolMapper {
     }
 
     static func map(
-        _ result: ToolResult
+        _ result: ToolCall.Response
     ) -> Bedrock.Converse.ToolResult {
         .init(
-            toolUseId: result.toolCallID,
+            toolUseId: result.call.id,
             content: [
                 .text(
                     toolResultText(

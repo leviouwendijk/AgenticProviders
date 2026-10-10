@@ -79,7 +79,7 @@ package enum AppleFoundationModelToolBridge {
 @available(macOS 26.0, *)
 package enum AppleFoundationModelToolOutputRenderer {
     package static func render(
-        _ result: ToolResult
+        _ result: ToolCall.Response
     ) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [
@@ -114,7 +114,7 @@ package enum AppleFoundationModelGenerationSchemaLowerer {
     ) throws -> GenerationSchema {
         let rootObject: [String: Any]
 
-        if let inputSchema = definition.inputSchema {
+        if let inputSchema = definition.input {
             let data = try JSONEncoder().encode(inputSchema)
             let value = try JSONSerialization.jsonObject(with: data)
 

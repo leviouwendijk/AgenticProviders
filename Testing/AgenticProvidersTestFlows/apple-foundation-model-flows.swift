@@ -16,14 +16,13 @@ private actor AppleFoundationModelToolResolverProbe:
 
     func resolve(
         _ call: ToolCall
-    ) async throws -> ToolResult {
+    ) async throws -> ToolCall.Response {
         calls.append(
             call
         )
 
-        return ToolResult(
-            toolCallID: call.id,
-            tool: call.tool,
+        return ToolCall.Response(
+            call: call.reference,
             output: .object([
                 "text": .string("let value = 42")
             ]),
@@ -93,7 +92,7 @@ extension AgenticProvidersFlowTesting {
         let definition = ToolDescriptor(
             name: "read_file",
             description: "Read a UTF-8 file in the authorized workspace.",
-            inputSchema: .object([
+            input: .object([
                 "type": .string("object"),
                 "properties": .object([
                     "path": .object([
@@ -116,9 +115,8 @@ extension AgenticProvidersFlowTesting {
                 "path": .string("Sources/example.swift")
             ])
         )
-        let priorResult = ToolResult(
-            toolCallID: priorCall.id,
-            tool: priorCall.tool,
+        let priorResult = ToolCall.Response(
+            call: priorCall.reference,
             output: .object([
                 "text": .string("let value = 42")
             ]),

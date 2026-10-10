@@ -43,15 +43,6 @@ struct OllamaRequestMapper {
 
 private struct OllamaMessageMapper {
     static func map(_ messages: [Message]) throws -> [OllamaChatMessage] {
-        var callsByID: [String: ToolCall] = [:]
-        for message in messages {
-            for block in message.content.blocks {
-                if case .tool_call(let call) = block {
-                    callsByID[call.id] = call
-                }
-            }
-        }
-
         var mapped: [OllamaChatMessage] = []
         for message in messages {
             switch message.role {
@@ -105,10 +96,9 @@ private struct OllamaMessageMapper {
                         throw OllamaGatewayError.unsupportedContent(message.role)
                     }
 
-                    let name = result.tool?.rawValue
-                        ?? callsByID[result.toolCallID]?.tool.rawValue
-                    guard let name, !name.isEmpty else {
-                        throw OllamaGatewayError.missingToolName(result.toolCallID)
+                    let name = result.call.tool.rawValue
+                    guard !name.isEmpty else {
+                        throw OllamaGatewayError.missingToolName(result.call.id)
                     }
 
                     mapped.append(
@@ -139,7 +129,7 @@ private struct OllamaMessageMapper {
         return text
     }
 
-    private static func toolResultText(_ result: ToolResult) -> String {
+    private static func toolResultText(_ result: ToolCall.Response) -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let rendered: String
@@ -162,7 +152,7 @@ private struct OllamaToolMapper {
                 function: .init(
                     name: definition.name,
                     description: definition.description,
-                    parameters: definition.inputSchema ?? defaultSchema
+                    parameters: definition.input ?? defaultSchema
                 )
             )
         }

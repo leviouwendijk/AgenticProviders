@@ -170,7 +170,7 @@ private struct HYAIMessageMapper {
                             ),
                             toolCalls: nil,
                             toolCallId:
-                                result.toolCallID
+                                result.call.id
                         )
                     )
                 }
@@ -245,7 +245,7 @@ private struct HYAIToolMapper {
                     description:
                         definition.description,
                     parameters:
-                        definition.inputSchema
+                        definition.input
                         ?? defaultSchema
                 )
             )

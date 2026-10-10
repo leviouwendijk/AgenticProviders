@@ -90,7 +90,7 @@ private extension AppleFoundationModelPromptRenderer {
             """
 
         case .tool_result(let result):
-            let name = result.tool?.rawValue ?? "unknown tool"
+            let name = result.call.tool.rawValue
             let status = result.isError
                 ? "error"
                 : "success"

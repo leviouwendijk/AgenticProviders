@@ -230,8 +230,10 @@ extension AgenticProvidersFlowTesting {
                         blocks: [
                             .tool_result(
                                 .init(
-                                    toolCallID: "tool-1",
-                                    tool: "gateway_scratchpad_put",
+                                    call: .init(
+                                        id: "tool-1",
+                                        tool: "gateway_scratchpad_put"
+                                    ),
                                     output: .object([
                                         "ok": .bool(true)
                                     ])
@@ -239,8 +241,10 @@ extension AgenticProvidersFlowTesting {
                             ),
                             .tool_result(
                                 .init(
-                                    toolCallID: "tool-2",
-                                    tool: "fixture_tool",
+                                    call: .init(
+                                        id: "tool-2",
+                                        tool: "fixture_tool"
+                                    ),
                                     output: .object([
                                         "kind": .string("tool_error"),
                                         "message": .string("Edit line payload contains newline characters and is not a single logical line.")

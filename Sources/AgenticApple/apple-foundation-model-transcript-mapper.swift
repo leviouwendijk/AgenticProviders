@@ -69,18 +69,6 @@ package enum AppleFoundationModelTranscriptMapper {
             throw AppleFoundationModelError.emptyPrompt
         }
 
-        var toolNamesByCallID: [String: String] = [:]
-
-        for message in conversationMessages {
-            for block in message.content.blocks {
-                guard case .tool_call(let call) = block else {
-                    continue
-                }
-
-                toolNamesByCallID[call.id] = call.tool.rawValue
-            }
-        }
-
         var entries: [Transcript.Entry] = []
         let instructionText = systemMessages
             .map(text)
@@ -203,13 +191,7 @@ package enum AppleFoundationModelTranscriptMapper {
                         continue
                     }
 
-                    guard let toolName = result.tool?.rawValue
-                        ?? toolNamesByCallID[result.toolCallID]
-                    else {
-                        throw AppleFoundationModelError.generationFailed(
-                            "Cannot map tool result '\(result.toolCallID)' without a tool name"
-                        )
-                    }
+                    let toolName = result.call.tool.rawValue
 
                     let output = try toolOutputText(
                         result
@@ -218,11 +200,11 @@ package enum AppleFoundationModelTranscriptMapper {
                     entries.append(
                         .toolOutput(
                             Transcript.ToolOutput(
-                                id: result.toolCallID,
+                                id: result.call.id,
                                 toolName: toolName,
                                 segments: [
                                     textSegment(
-                                        id: "\(result.toolCallID)-output-text",
+                                        id: "\(result.call.id)-output-text",
                                         content: output
                                     )
                                 ]
@@ -275,7 +257,7 @@ private extension AppleFoundationModelTranscriptMapper {
     }
 
     static func toolOutputText(
-        _ result: ToolResult
+        _ result: ToolCall.Response
     ) throws -> String {
         let output = try json(
             result.output
