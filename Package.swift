@@ -25,6 +25,12 @@ let package = Package(
             targets: ["AgenticHYAI"]
         ),
 
+        // PACKAGES TO DO:
+        // ....AgenticAnthropic
+        // ....AgenticOpenAI
+        // ....AgenticGoogle
+        // ....AgenticMeta
+
         // testing
         .executable(
             name: "t_ap_main",

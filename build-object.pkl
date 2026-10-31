@@ -1,0 +1,20 @@
+uuid = "7BA3F7A1-9B95-4EA6-AEA6-EDC65AB519AC"
+name = "AgenticProviders"
+types { "library" }
+versions {
+    release {
+        major = 0
+        minor = 1
+        patch = 0
+    }
+}
+compile {
+    use = false
+    arguments { }
+}
+tests {
+    primary = "t_ap_main"
+}
+details = ""
+author = "levi"
+update = "https://raw.githubusercontent.com/leviouwendijk/AgenticProviders/master/build-object.pkl"

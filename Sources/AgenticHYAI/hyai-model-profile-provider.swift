@@ -21,40 +21,7 @@ public struct HYAIModelProfileProvider:
     }
 
     public func profiles() throws -> [AgentModelProfile] {
-        [
-            .init(
-                identifier: .hyai_glm_v5_3_flash,
-                gatewayIdentifier: gatewayIdentifier,
-                model: "zai-org/GLM-5.3-Flash",
-                modelID: KnownModel.glm.v5_3_flash,
-                title: "HostYourAI GLM 5.3 Flash",
-                purposes: [
-                    .executor,
-                    .planner,
-                    .researcher,
-                    .advisor,
-                    .reviewer,
-                    .summarizer,
-                    .classifier,
-                    .extractor,
-                    .coder,
-                ],
-                capabilities: [
-                    .text,
-                    .tool_use,
-                    .streaming,
-                ],
-                cost: .balanced,
-                latency: .medium,
-                privacy: .private_cloud,
-                limits: .unknown,
-                metadata: [
-                    "provider": "hostyourai",
-                    "gateway": "hyai_chat_completions",
-                    "virtual_model": "false",
-                    "hostyourai_model": "zai-org/GLM-5.3-Flash",
-                ]
-            ),
+        HYAIModelCatalog.profiles(gatewayIdentifier: gatewayIdentifier) + [
             .init(
                 identifier: profileIdentifier,
                 gatewayIdentifier: gatewayIdentifier,

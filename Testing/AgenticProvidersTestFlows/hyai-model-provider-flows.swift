@@ -251,6 +251,68 @@ extension AgenticProvidersFlowTesting {
             ),
         ]
     }
+
+    static func runHYAICuratedCatalogSemantics()
+        async throws -> [TestDiagnostic]
+    {
+        let profiles = try HYAIModelProfileProvider().profiles()
+        let physical = profiles.filter { $0.model != "hyai/auto" }
+        let pricing = try HYAIModelCatalog.pricingSnapshots()
+
+        try Expect.equal(
+            profiles.count,
+            17,
+            "Curated HostYourAI catalog exposes 16 physical models and Auto"
+        )
+        try Expect.equal(
+            Set(profiles.map(\.identifier)).count,
+            profiles.count,
+            "Every HostYourAI profile has a unique stable identifier"
+        )
+        try Expect.equal(
+            pricing.count,
+            physical.count,
+            "Every explicit HostYourAI model has a typed EUR price snapshot"
+        )
+
+        for profile in physical {
+            try Expect.equal(
+                pricing.filter { $0.model == profile.model }.count,
+                1,
+                "The pricing catalog keys each physical model by its wire ID"
+            )
+            try Expect.equal(
+                profile.gatewayIdentifier,
+                .hyai,
+                "All physical models retain the configured HostYourAI gateway"
+            )
+        }
+
+        let flash = pricing.first {
+            $0.model == "deepseek-ai/DeepSeek-V4.1-Flash-1017"
+        }
+        try Expect.equal(
+            flash?.currencyCode ?? "",
+            "EUR",
+            "Prices preserve the quoted currency"
+        )
+        try Expect.equal(
+            flash?.component(.inputTokens)?.priceMicros ?? -1,
+            Int64(580000),
+            "DeepSeek V4.1 Flash 1017 quoted input price"
+        )
+        try Expect.equal(
+            flash?.component(.outputTokens)?.priceMicros ?? -1,
+            Int64(1720000),
+            "DeepSeek V4.1 Flash 1017 quoted output price"
+        )
+
+        return [
+            .field("physical_profiles", String(physical.count)),
+            .field("pricing_snapshots", String(pricing.count)),
+        ]
+    }
+
 }
 
 private enum HYAIAvailabilityFixtureError:
