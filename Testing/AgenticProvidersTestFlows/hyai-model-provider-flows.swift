@@ -275,7 +275,42 @@ extension AgenticProvidersFlowTesting {
             "Every explicit HostYourAI model has a typed EUR price snapshot"
         )
 
+        let expectedModels: [String: AgentModelID] = [
+            "deepseek-ai/DeepSeek-V4-Flash": KnownModel.deepseek.v4_flash,
+            "deepseek-ai/DeepSeek-V4.1-Flash": KnownModel.deepseek.v4_1_flash,
+            "deepseek-ai/DeepSeek-V4.1-Flash-1017": KnownModel.deepseek.v4_1_flash_1017,
+            "deepseek-ai/DeepSeek-V4-Pro": KnownModel.deepseek.v4_pro,
+            "deepseek-ai/DeepSeek-V4-Pro-0813": KnownModel.deepseek.v4_pro_0813,
+            "Qwen/Qwen3.8-27B": KnownModel.qwen.v3_8_27b,
+            "Qwen/Qwen3.8-Flash-Next": KnownModel.qwen.v3_8_flash_next,
+            "qwen3-235b-a22b-instruct-2507": KnownModel.qwen.v3_235b_a22b_instruct_2507,
+            "qwen3.5-397b-a17b": KnownModel.qwen.v3_5_397b_a17b,
+            "moonshotai/Kimi-K3": KnownModel.kimi.k3,
+            "moonshotai/Kimi-K2.5": KnownModel.kimi.k2_5,
+            "moonshotai/Kimi-K2.6": KnownModel.kimi.k2_6,
+            "moonshotai/Kimi-K2.7-Code": KnownModel.kimi.k2_7_code,
+            "zai-org/GLM-5.3": KnownModel.glm.v5_3,
+            "zai-org/GLM-5.1": KnownModel.glm.v5_1,
+            "zai-org/GLM-5.3-Flash": KnownModel.glm.v5_3_flash,
+        ]
+
+        try Expect.equal(
+            expectedModels.count,
+            physical.count,
+            "Every physical HYAI model has a canonical identity fixture"
+        )
+        try Expect.equal(
+            Set(physical.compactMap(\.modelID)).count,
+            physical.count,
+            "Physical HYAI profiles have unique canonical identities"
+        )
+
         for profile in physical {
+            try Expect.equal(
+                profile.modelID,
+                expectedModels[profile.model],
+                "HYAI wire model resolves to its canonical KnownModel identity"
+            )
             try Expect.equal(
                 pricing.filter { $0.model == profile.model }.count,
                 1,

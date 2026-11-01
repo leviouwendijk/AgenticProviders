@@ -26,7 +26,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_deepseek_v4_1_flash",
             model: "deepseek-ai/DeepSeek-V4.1-Flash",
-            modelID: "deepseek:v4-1-flash",
+            modelID: KnownModel.deepseek.v4_1_flash,
             title: "DeepSeek V4.1 Flash",
             cost: .balanced,
             inputMicros: 580000,
@@ -35,7 +35,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_deepseek_v4_1_flash_1017",
             model: "deepseek-ai/DeepSeek-V4.1-Flash-1017",
-            modelID: "deepseek:v4-1-flash-1017",
+            modelID: KnownModel.deepseek.v4_1_flash_1017,
             title: "DeepSeek V4.1 Flash 1017",
             cost: .balanced,
             inputMicros: 580000,
@@ -53,7 +53,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_deepseek_v4_pro_0813",
             model: "deepseek-ai/DeepSeek-V4-Pro-0813",
-            modelID: "deepseek:v4-pro-0813",
+            modelID: KnownModel.deepseek.v4_pro_0813,
             title: "DeepSeek V4 Pro 0813",
             cost: .balanced,
             inputMicros: 2300000,
@@ -62,7 +62,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_qwen3_8_27b",
             model: "Qwen/Qwen3.8-27B",
-            modelID: "qwen:qwen3-8-27b",
+            modelID: KnownModel.qwen.v3_8_27b,
             title: "Qwen3.8 27B",
             cost: .balanced,
             inputMicros: 460000,
@@ -71,7 +71,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_qwen3_8_flash_next",
             model: "Qwen/Qwen3.8-Flash-Next",
-            modelID: "qwen:qwen3-8-flash-next",
+            modelID: KnownModel.qwen.v3_8_flash_next,
             title: "Qwen3.8 Flash Next",
             cost: .cheap,
             inputMicros: 230000,
@@ -80,7 +80,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_qwen3_235b_a22b_instruct",
             model: "qwen3-235b-a22b-instruct-2507",
-            modelID: "qwen:qwen3-235b-a22b-instruct-2507",
+            modelID: KnownModel.qwen.v3_235b_a22b_instruct_2507,
             title: "Qwen3 235B A22B Instruct",
             cost: .cheap,
             inputMicros: 80000,
@@ -116,7 +116,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_kimi_k2_6",
             model: "moonshotai/Kimi-K2.6",
-            modelID: "moonshot:kimi-k2-6",
+            modelID: KnownModel.kimi.k2_6,
             title: "Kimi K2.6",
             cost: .balanced,
             inputMicros: 1150000,
@@ -125,7 +125,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_kimi_k2_7_code",
             model: "moonshotai/Kimi-K2.7-Code",
-            modelID: "moonshot:kimi-k2-7-code",
+            modelID: KnownModel.kimi.k2_7_code,
             title: "Kimi K2.7 Code",
             cost: .expensive,
             inputMicros: 1440000,
@@ -134,7 +134,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_glm_v5_3",
             model: "zai-org/GLM-5.3",
-            modelID: "zai:glm-5-3",
+            modelID: KnownModel.glm.v5_3,
             title: "GLM 5.3",
             cost: .expensive,
             inputMicros: 1610000,
@@ -143,7 +143,7 @@ public enum HYAIModelCatalog {
         .init(
             identifier: "hyai_glm_v5_1",
             model: "zai-org/GLM-5.1",
-            modelID: "zai:glm-5-1",
+            modelID: KnownModel.glm.v5_1,
             title: "GLM 5.1",
             cost: .balanced,
             inputMicros: 1480000,
