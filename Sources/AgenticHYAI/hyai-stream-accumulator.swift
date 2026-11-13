@@ -28,6 +28,12 @@ struct HYAIStreamAccumulator: Sendable {
     mutating func consume(
         _ chunk: HYAIChatCompletionChunk
     ) throws -> [AgentStreamEvent] {
+        // Usage arrives in its own chunk after the one carrying
+        // finish_reason, so it is read even once content has finished.
+        if let chunkUsage = chunk.usage {
+            usage = chunkUsage.agentUsage
+        }
+
         guard response == nil else {
             return []
         }
@@ -36,10 +42,6 @@ struct HYAIStreamAccumulator: Sendable {
            !model.isEmpty
         {
             resolvedModel = model
-        }
-
-        if let chunkUsage = chunk.usage {
-            usage = chunkUsage.agentUsage
         }
 
         guard let choice = chunk.choices.first else {
@@ -164,17 +166,22 @@ struct HYAIStreamAccumulator: Sendable {
         )
 
         response = completed
-        events.append(
-            .completed(completed)
-        )
-
         return events
     }
 
-    func requireCompleted() throws {
-        guard response != nil else {
+    /// The completed response, with the usage reported after content ended.
+    func finish() throws -> AgentStreamEvent {
+        guard let response else {
             throw HYAIGatewayError
                 .streamEndedWithoutResponse
         }
+        return .completed(
+            AgentResponse(
+                message: response.message,
+                stopReason: response.stopReason,
+                usage: usage,
+                metadata: response.metadata
+            )
+        )
     }
 }

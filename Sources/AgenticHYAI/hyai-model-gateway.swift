@@ -174,7 +174,7 @@ public struct HYAIModelResponseProvider:
                         }
                     }
 
-                    try accumulator.requireCompleted()
+                    continuation.yield(try accumulator.finish())
                     continuation.finish()
                 } catch {
                     continuation.finish(

@@ -10,7 +10,13 @@ struct HYAIChatRequest: Sendable, Codable {
     let topP: Double?
     let maxTokens: Int?
     let stop: [String]?
+    /// Streams report usage only when asked (`include_usage`).
+    let streamOptions: HYAIStreamOptions?
     let hyai: HYAIRouterOptions?
+}
+
+struct HYAIStreamOptions: Sendable, Codable {
+    let includeUsage: Bool
 }
 
 struct HYAIRouterOptions: Sendable, Codable {

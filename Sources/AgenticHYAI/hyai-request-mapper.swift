@@ -43,6 +43,7 @@ struct HYAIRequestMapper {
                 request.generationConfiguration.stopSequences.isEmpty
                     ? nil
                     : request.generationConfiguration.stopSequences,
+            streamOptions: stream ? .init(includeUsage: true) : nil,
             hyai:
                 model == "hyai/auto"
                     ? .init(

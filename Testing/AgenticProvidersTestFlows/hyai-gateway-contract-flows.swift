@@ -32,6 +32,10 @@ extension AgenticProvidersFlowTesting {
         try Expect.true(json.contains(#""tool_calls""#), "Assistant calls encode as tool_calls")
         try Expect.true(!json.contains("function_calls"), "Internal naming never reaches the wire")
         try Expect.true(json.contains(#""tool_call_id":"call_1""#), "Results keep their call id")
+        try Expect.true(
+            json.contains(#""stream_options":{"include_usage":true}"#),
+            "Streams ask for usage"
+        )
 
         let assistant = mapped.messages[1]
         try Expect.equal(assistant.toolCalls?.first?.id, "call_1", "Call id is preserved")
@@ -79,8 +83,12 @@ extension AgenticProvidersFlowTesting {
             #"{"choices":[{"delta":{"tool_calls":[{"index":1,"function":{"arguments":"th\":\".\"}"}}]}}]}"#,
             #"{"choices":[{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\"README.md\"}"}}]}}]}"#,
             #"{"choices":[{"delta":{},"finish_reason":"tool_calls"}]}"#,
+            // include_usage: usage follows finish_reason in its own chunk.
+            #"{"choices":[],"usage":{"prompt_tokens":12000,"completion_tokens":80,"total_tokens":12080,"prompt_tokens_details":{"cached_tokens":10240}}}"#,
         ]
         let response = try stream(frames)
+        try Expect.equal(response.usage?.cachedInputReadTokens, 10240, "Usage after finish_reason is kept")
+        try Expect.equal(response.usage?.inputTokens, 1760, "Uncached input excludes cache reads")
 
         try Expect.equal(response.stopReason, .tool_use, "Streamed tool calls stop for tool use")
         try Expect.equal(
@@ -105,16 +113,16 @@ extension AgenticProvidersFlowTesting {
         _ frames: [String]
     ) throws -> AgentResponse {
         var accumulator = HYAIStreamAccumulator(requestedModel: "hyai/auto", metadata: [:])
-        var completed: AgentResponse?
         for frame in frames {
             let chunk = try HYAICodec.decode(HYAIChatCompletionChunk.self, from: Data(frame.utf8))
             for event in try accumulator.consume(chunk) {
-                if case .completed(let response) = event {
-                    completed = response
+                if case .completed = event {
+                    // Completion waits for the end of the stream.
+                    throw HYAIContractFixtureError.noResponse
                 }
             }
         }
-        guard let completed else {
+        guard case .completed(let completed) = try accumulator.finish() else {
             throw HYAIContractFixtureError.noResponse
         }
         return completed
