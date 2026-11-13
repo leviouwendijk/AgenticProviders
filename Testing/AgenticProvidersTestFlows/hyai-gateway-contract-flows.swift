@@ -109,6 +109,47 @@ extension AgenticProvidersFlowTesting {
         return [.field("calls", "2")]
     }
 
+    static func runHYAILivePricing() throws -> [TestDiagnostic] {
+        let list = try HYAICodec.decode(HYAIModelList.self, from: Data(#"""
+        {"data":[
+          {"id":"hyai/auto","pricing":{"input_per_million":null,"output_per_million":null,"currency":"EUR"}},
+          {"id":"deepseek-ai/DeepSeek-V4-Flash","pricing":{"input_per_million":0.29,"cached_input_per_million":0.07,"output_per_million":0.35,"currency":"EUR"}},
+          {"id":"google/gemma-3-27b-it","pricing":{"input_per_million":0.1,"output_per_million":0.32,"currency":"EUR"}},
+          {"id":"BAAI/bge-m3","pricing":{"currency":"EUR"}}
+        ]}
+        """#.utf8))
+        let snapshots = try HYAIModelCatalog.liveSnapshots(list, fetchedAt: Date())
+        try Expect.equal(
+            snapshots.map(\.model),
+            ["deepseek-ai/DeepSeek-V4-Flash", "google/gemma-3-27b-it"],
+            "Only models with input and output prices are priced"
+        )
+        let flash = snapshots[0]
+        try Expect.equal(flash.source, .live, "Live snapshots are marked live")
+        try Expect.equal(
+            flash.components.first { $0.kind == .cachedInputReadTokens }?.priceMicros,
+            70000,
+            "Cached input price is kept"
+        )
+        try Expect.equal(
+            flash.components.first { $0.kind == .inputTokens }?.priceMicros,
+            290000,
+            "Input price converts to micros"
+        )
+        try Expect.true(
+            !snapshots[1].components.contains { $0.kind == .cachedInputReadTokens },
+            "No cached price is invented"
+        )
+
+        // Billed names differ from catalog IDs: deepseek/deepseek-v4-flash.
+        let catalog = StaticModelPricingCatalog(snapshots: snapshots)
+        let billed = try catalog.pricing(for: .init(
+            provider: "hostyourai", model: "deepseek/deepseek-v4-flash", region: nil
+        ))
+        try Expect.equal(billed.model, flash.model, "Billed names resolve to the catalog entry")
+        return [.field("priced", String(snapshots.count))]
+    }
+
     private static func stream(
         _ frames: [String]
     ) throws -> AgentResponse {

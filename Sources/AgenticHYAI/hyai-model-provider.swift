@@ -1,4 +1,5 @@
 import Agentic
+import Foundation
 import Milieu
 
 public struct HYAIModelProvider: AgentModelProvider {
@@ -129,5 +130,19 @@ public struct HYAIModelProvider: AgentModelProvider {
 
     public func pricingSnapshots() throws -> [ModelPricingSnapshot] {
         try HYAIModelCatalog.pricingSnapshots()
+    }
+
+    /// Every model `/v1/models` prices, including those `hyai/auto` may
+    /// choose. Requires the API key; fails rather than guessing.
+    public func livePricing() async throws -> [ModelPricingSnapshot] {
+        let configuration = try HYAIModelConfiguration(
+            endpoint: endpoint,
+            apiKey: try EnvironmentExtractor.value(apiKeySymbol)
+        )
+        let list = try await HYAIURLSessionRuntime(
+            apiKey: configuration.apiKey,
+            timeoutseconds: nil
+        ).models(endpoint: configuration.endpoint)
+        return try HYAIModelCatalog.liveSnapshots(list, fetchedAt: Date())
     }
 }

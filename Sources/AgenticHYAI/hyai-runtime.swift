@@ -178,6 +178,24 @@ struct HYAIURLSessionRuntime: Sendable {
     }
 }
 
+extension HYAIURLSessionRuntime {
+    /// The published model catalog. A short timeout: this runs at launch.
+    func models(
+        endpoint: URL,
+        timeout: TimeInterval = 5
+    ) async throws -> HYAIModelList {
+        var request = URLRequest(url: endpoint.appendingPathComponent("models"))
+        request.timeoutInterval = timeout
+        request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            throw HYAIGatewayError.invalidHTTPResponse
+        }
+        try validate(response, body: data)
+        return try HYAICodec.decode(HYAIModelList.self, from: data)
+    }
+}
+
 private extension HYAIURLSessionRuntime {
     func makeRequest(
         _ request: HYAIChatRequest,

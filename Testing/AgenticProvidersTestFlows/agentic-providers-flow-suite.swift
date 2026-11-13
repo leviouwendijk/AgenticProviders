@@ -71,6 +71,12 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
             try AgenticProvidersFlowTesting.runHYAIBufferedToolCalls()
         },
         TestFlow(
+            ID.hyai_live_pricing,
+            tags: ["hyai", "model-provider", "pricing", "offline"]
+        ) {
+            try AgenticProvidersFlowTesting.runHYAILivePricing()
+        },
+        TestFlow(
             ID.hyai_streamed_tool_calls,
             tags: ["hyai", "model-provider", "wire", "tool-calls", "stream", "offline"]
         ) {
@@ -159,6 +165,7 @@ extension AgenticProvidersFlowSuite {
         static let hyai_outgoing_tool_calls = "hyai-outgoing-tool-calls"
         static let hyai_buffered_tool_calls = "hyai-buffered-tool-calls"
         static let hyai_streamed_tool_calls = "hyai-streamed-tool-calls"
+        static let hyai_live_pricing = "hyai-live-pricing"
         static let bedrock_model_provider_catalog_realization = "bedrock-model-provider-catalog-realization"
         static let bedrock_multiple_gateway_provider_realization = "bedrock-multiple-gateway-provider-realization"
         static let bedrock_buffered_stream_completion = "bedrock-buffered-stream-completion"

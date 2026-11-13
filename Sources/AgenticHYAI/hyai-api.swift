@@ -19,6 +19,24 @@ struct HYAIStreamOptions: Sendable, Codable {
     let includeUsage: Bool
 }
 
+/// `GET /v1/models`: the catalog with per-model pricing.
+struct HYAIModelList: Sendable, Codable {
+    let data: [HYAIModelListing]
+}
+
+struct HYAIModelListing: Sendable, Codable {
+    let id: String
+    let pricing: HYAIModelPricing?
+}
+
+/// EUR (or `currency`) per million tokens; nil when not published.
+struct HYAIModelPricing: Sendable, Codable {
+    let inputPerMillion: Double?
+    let cachedInputPerMillion: Double?
+    let outputPerMillion: Double?
+    let currency: String?
+}
+
 struct HYAIRouterOptions: Sendable, Codable {
     let task: HYAITask
     let policy: HYAIPolicy

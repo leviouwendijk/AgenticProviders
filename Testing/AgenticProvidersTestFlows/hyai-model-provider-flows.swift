@@ -285,8 +285,13 @@ extension AgenticProvidersFlowTesting {
         )
         try Expect.equal(
             composed.component(.outputTokens)?.priceMicros ?? -1,
-            Int64(1720000),
+            Int64(2070000),
             "Prices are resolvable through the installed provider catalog"
+        )
+        try Expect.equal(
+            composed.component(.cachedInputReadTokens)?.priceMicros ?? -1,
+            Int64(140000),
+            "Curated prices include the published cached-input rate"
         )
 
         try Expect.equal(
@@ -363,12 +368,12 @@ extension AgenticProvidersFlowTesting {
         )
         try Expect.equal(
             flash?.component(.inputTokens)?.priceMicros ?? -1,
-            Int64(580000),
+            Int64(690000),
             "DeepSeek V4.1 Flash 1017 quoted input price"
         )
         try Expect.equal(
             flash?.component(.outputTokens)?.priceMicros ?? -1,
-            Int64(1720000),
+            Int64(2070000),
             "DeepSeek V4.1 Flash 1017 quoted output price"
         )
 
