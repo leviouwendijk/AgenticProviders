@@ -21,7 +21,7 @@ struct HYAIRouterOptions: Sendable, Codable {
 struct HYAIChatMessage: Sendable, Codable {
     let role: String
     let content: String?
-    let functionCalls: [HYAIToolCall]?
+    let toolCalls: [HYAIToolCall]?
     let toolCallId: String?
 }
 
@@ -72,7 +72,7 @@ struct HYAIChatCompletionChunkChoice: Sendable, Codable {
 
 struct HYAIChatCompletionDelta: Sendable, Codable {
     let content: String?
-    let functionCalls: [HYAIToolCall]?
+    let toolCalls: [HYAIToolCall]?
 }
 
 /// OpenAI-shaped usage: promptTokens includes cached and cache-created tokens,

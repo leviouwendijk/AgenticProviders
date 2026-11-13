@@ -60,7 +60,7 @@ struct HYAIStreamAccumulator: Sendable {
         }
 
         for providerCall
-            in choice.delta.functionCalls ?? []
+            in choice.delta.toolCalls ?? []
         {
             guard let index = providerCall.index else {
                 throw HYAIGatewayError.invalidToolCall
@@ -110,6 +110,11 @@ struct HYAIStreamAccumulator: Sendable {
                         partial.arguments
                 )
             }
+
+        try HYAIResponseMapper.requireCalls(
+            functionCalls,
+            finishReason: finishReason
+        )
 
         for call in functionCalls {
             events.append(

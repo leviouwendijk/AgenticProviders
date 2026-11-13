@@ -102,9 +102,14 @@ struct HYAIURLSessionRuntime: Sendable {
                             .invalidHTTPResponse
                     }
 
+                    // A rejected stream carries a diagnostic body, not SSE;
+                    // read a bounded prefix of it. Success streams are
+                    // left untouched.
                     try validate(
                         response,
-                        body: nil
+                        body: (200..<300).contains(response.statusCode)
+                            ? nil
+                            : await diagnosticBody(bytes)
                     )
 
                     for try await line in bytes.lines {
@@ -241,14 +246,38 @@ private extension HYAIURLSessionRuntime {
         ) else {
             throw HYAIGatewayError.httpStatus(
                 status: response.statusCode,
-                body: body.flatMap {
+                body: body.map {
                     String(
-                        data: $0,
-                        encoding: .utf8
+                        decoding: $0.prefix(
+                            diagnosticBodyLimit
+                        ),
+                        as: UTF8.self
                     )
                 }
             )
         }
+    }
+
+    /// Bounded so a large rejection never floods errors or logs.
+    var diagnosticBodyLimit: Int {
+        8_192
+    }
+
+    func diagnosticBody(
+        _ bytes: URLSession.AsyncBytes
+    ) async -> Data {
+        var data = Data()
+        do {
+            for try await byte in bytes {
+                data.append(byte)
+                if data.count >= diagnosticBodyLimit {
+                    break
+                }
+            }
+        } catch {
+            // Keep what arrived; the status is reported regardless.
+        }
+        return data
     }
 
     func intHeader(

@@ -24,6 +24,8 @@ public enum HYAIGatewayError:
     )
     case invalidResponse
     case invalidToolCall
+    /// finish_reason was tool_calls, but no call could be reconstructed.
+    case missingToolCalls
     case invalidToolArguments(String)
     case invalidStreamFrame(String)
     case streamEndedWithoutResponse
@@ -78,6 +80,9 @@ public enum HYAIGatewayError:
 
         case .invalidToolCall:
             return "HostYourAI returned an incomplete tool call."
+
+        case .missingToolCalls:
+            return "HostYourAI finished with tool_calls but returned no tool call."
 
         case .invalidToolArguments(let value):
             return "HostYourAI returned invalid JSON tool arguments: \(value)"

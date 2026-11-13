@@ -59,6 +59,24 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
             try await AgenticProvidersFlowTesting.runHYAICuratedCatalogSemantics()
         },
         TestFlow(
+            ID.hyai_outgoing_tool_calls,
+            tags: ["hyai", "model-provider", "wire", "tool-calls", "offline"]
+        ) {
+            try AgenticProvidersFlowTesting.runHYAIOutgoingToolCalls()
+        },
+        TestFlow(
+            ID.hyai_buffered_tool_calls,
+            tags: ["hyai", "model-provider", "wire", "tool-calls", "offline"]
+        ) {
+            try AgenticProvidersFlowTesting.runHYAIBufferedToolCalls()
+        },
+        TestFlow(
+            ID.hyai_streamed_tool_calls,
+            tags: ["hyai", "model-provider", "wire", "tool-calls", "stream", "offline"]
+        ) {
+            try AgenticProvidersFlowTesting.runHYAIStreamedToolCalls()
+        },
+        TestFlow(
             ID.bedrock_model_provider_catalog_realization,
             tags: ["aws", "bedrock", "model-provider", "model-routing", "offline"]
         ) {
@@ -138,6 +156,9 @@ extension AgenticProvidersFlowSuite {
         static let hyai_auto_profile_semantics = "hyai-auto-profile-semantics"
         static let hyai_explicit_model_profile_semantics = "hyai-explicit-model-profile-semantics"
         static let hyai_curated_catalog_semantics = "hyai-curated-catalog-semantics"
+        static let hyai_outgoing_tool_calls = "hyai-outgoing-tool-calls"
+        static let hyai_buffered_tool_calls = "hyai-buffered-tool-calls"
+        static let hyai_streamed_tool_calls = "hyai-streamed-tool-calls"
         static let bedrock_model_provider_catalog_realization = "bedrock-model-provider-catalog-realization"
         static let bedrock_multiple_gateway_provider_realization = "bedrock-multiple-gateway-provider-realization"
         static let bedrock_buffered_stream_completion = "bedrock-buffered-stream-completion"

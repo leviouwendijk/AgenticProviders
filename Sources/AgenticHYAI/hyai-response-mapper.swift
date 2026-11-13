@@ -23,7 +23,11 @@ struct HYAIResponseMapper {
         }
 
         let calls = try mapToolCalls(
-            choice.message.functionCalls ?? []
+            choice.message.toolCalls ?? []
+        )
+        try requireCalls(
+            calls,
+            finishReason: choice.finishReason
         )
         blocks.append(
             contentsOf: calls.map {
@@ -50,6 +54,17 @@ struct HYAIResponseMapper {
                 metadata: metadata
             )
         )
+    }
+
+    /// A response that finished for tool calls must carry at least one;
+    /// otherwise the turn would silently complete as empty text.
+    static func requireCalls(
+        _ calls: [FunctionCall],
+        finishReason: String?
+    ) throws {
+        if finishReason == "tool_calls", calls.isEmpty {
+            throw HYAIGatewayError.missingToolCalls
+        }
     }
 
     static func mapToolCall(
