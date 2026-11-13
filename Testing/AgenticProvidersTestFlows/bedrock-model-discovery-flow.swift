@@ -245,22 +245,18 @@ extension AgenticProvidersFlowTesting {
     }
 
     static func runBedrockDiscoveryToolRegistration() async throws -> [TestDiagnostic] {
-        let tools = BedrockModelDiscoveryToolSet(
-            discovery: BedrockModelDiscovery(
-                control: bedrockFixtureClient()
-            )
-        )
-
-        _ = tools.listModelHandles
-        _ = tools.listDiscoveredProfiles
-        _ = tools.resolveModelHandle
+        let definitions = [
+            BedrockModels.Tools.Handles.definition,
+            BedrockModels.Tools.Profiles.definition,
+            BedrockModels.Tools.Resolve.definition,
+        ]
 
         let expectedNames = [
             "bedrock_list_discovered_profiles",
             "bedrock_list_model_handles",
             "bedrock_resolve_model_handle",
         ]
-        let actualNames = tools.definitions
+        let actualNames = definitions
             .map { definition in
                 definition.identifier.rawValue
             }
@@ -269,10 +265,10 @@ extension AgenticProvidersFlowTesting {
         try Expect.equal(
             actualNames,
             expectedNames.sorted(),
-            "Bedrock discovery tool bundle exposes the expected core Tool definitions"
+            "Bedrock discovery domain exposes the expected core Tool definitions"
         )
 
-        for definition in tools.definitions {
+        for definition in definitions {
             try Expect.equal(
                 definition.risk,
                 .observe,
@@ -284,7 +280,7 @@ extension AgenticProvidersFlowTesting {
             .field(
                 "tool_count",
                 String(
-                    tools.definitions.count
+                    definitions.count
                 )
             ),
             .field(

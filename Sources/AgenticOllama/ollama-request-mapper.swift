@@ -68,7 +68,7 @@ private struct OllamaMessageMapper {
                                 id: call.id,
                                 function: .init(
                                     index: calls.count,
-                                    name: call.tool.rawValue,
+                                    name: call.name,
                                     arguments: call.input
                                 )
                             )
@@ -86,7 +86,7 @@ private struct OllamaMessageMapper {
                     .init(
                         role: "assistant",
                         content: text,
-                        toolCalls: calls.isEmpty ? nil : calls
+                        functionCalls: calls.isEmpty ? nil : calls
                     )
                 )
 
@@ -129,7 +129,7 @@ private struct OllamaMessageMapper {
         return text
     }
 
-    private static func toolResultText(_ result: ToolCall.Response) -> String {
+    private static func toolResultText(_ result: ToolExecution.Response) -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let rendered: String

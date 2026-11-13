@@ -73,7 +73,7 @@ private extension ProviderFlowDiagnostics {
                 return "delta: \(block)"
 
             case .toolcall(let call):
-                return "toolcall: \(call.tool.rawValue) id=\(call.id) input=\(call.input)"
+                return "toolcall: \(call.name) id=\(call.id) input=\(call.input)"
 
             case .toolresult(let result):
                 return "toolresult: \(result.call.tool.rawValue) id=\(result.call.id) output=\(result.output)"

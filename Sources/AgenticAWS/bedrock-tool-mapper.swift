@@ -31,17 +31,17 @@ enum BedrockToolMapper {
     }
 
     static func map(
-        _ call: ToolCall
+        _ call: FunctionCall
     ) -> Bedrock.Converse.ToolUse {
         .init(
             toolUseId: call.id,
-            name: call.tool.rawValue,
+            name: call.name,
             input: call.input
         )
     }
 
     static func map(
-        _ result: ToolCall.Response
+        _ result: ToolExecution.Response
     ) -> Bedrock.Converse.ToolResult {
         .init(
             toolUseId: result.call.id,

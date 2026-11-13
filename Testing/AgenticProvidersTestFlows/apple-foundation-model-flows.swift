@@ -10,18 +10,18 @@ import FoundationModels
 #endif
 
 private actor AppleFoundationModelToolResolverProbe:
-    ToolCallResolver
+    FunctionCallResolver
 {
-    private var calls: [ToolCall] = []
+    private var calls: [FunctionCall] = []
 
     func resolve(
-        _ call: ToolCall
-    ) async throws -> ToolCall.Response {
+        _ call: FunctionCall
+    ) async throws -> ToolExecution.Response {
         calls.append(
             call
         )
 
-        return ToolCall.Response(
+        return ToolExecution.Response(
             call: call.reference,
             output: .object([
                 "text": .string("let value = 42")
@@ -30,7 +30,7 @@ private actor AppleFoundationModelToolResolverProbe:
         )
     }
 
-    func recordedCalls() -> [ToolCall] {
+    func recordedCalls() -> [FunctionCall] {
         calls
     }
 }
@@ -108,14 +108,14 @@ extension AgenticProvidersFlowTesting {
                 ])
             ])
         )
-        let priorCall = ToolCall(
+        let priorCall = FunctionCall(
             id: "apple-tool-call",
-            tool: "read_file",
+            name: "read_file",
             input: .object([
                 "path": .string("Sources/example.swift")
             ])
         )
-        let priorResult = ToolCall.Response(
+        let priorResult = ToolExecution.Response(
             call: priorCall.reference,
             output: .object([
                 "text": .string("let value = 42")
@@ -312,7 +312,7 @@ extension AgenticProvidersFlowTesting {
             }
 
             try Expect.equal(
-                resolvedCall.tool.rawValue,
+                resolvedCall.name,
                 "read_file",
                 "resolved Agentic tool name"
             )
@@ -331,7 +331,7 @@ extension AgenticProvidersFlowTesting {
 
             return [
                 ProviderFlowDiagnostics.input(request),
-                .field("tool", resolvedCall.tool.rawValue),
+                .field("tool", resolvedCall.name),
                 .field("native-continuation", "tool result returned"),
                 .section(
                     "rendered",

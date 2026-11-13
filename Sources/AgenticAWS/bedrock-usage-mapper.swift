@@ -9,10 +9,13 @@ enum BedrockUsageMapper {
             return nil
         }
 
+        // Bedrock's inputTokens already excludes cache reads and writes.
         return .init(
             inputTokens: usage.inputTokens,
             outputTokens: usage.outputTokens,
-            totalTokens: usage.totalTokens
+            totalTokens: usage.totalTokens,
+            cachedInputReadTokens: usage.cacheReadInputTokens,
+            cachedInputWriteTokens: usage.cacheWriteInputTokens
         )
     }
 }

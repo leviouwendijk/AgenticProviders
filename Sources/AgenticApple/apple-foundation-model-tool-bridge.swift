@@ -16,11 +16,11 @@ package struct AppleFoundationModelToolProxy: FoundationModels.Tool {
     package let parameters: GenerationSchema
     package let includesSchemaInInstructions = true
 
-    private let resolver: any ToolCallResolver
+    private let resolver: any FunctionCallResolver
 
     package init(
         definition: ToolDescriptor,
-        resolver: any ToolCallResolver
+        resolver: any FunctionCallResolver
     ) throws {
         self.name = definition.name
         self.description = definition.description
@@ -46,11 +46,9 @@ package struct AppleFoundationModelToolProxy: FoundationModels.Tool {
         }
 
         let result = try await resolver.resolve(
-            ToolCall(
+            FunctionCall(
                 id: UUID().uuidString,
-                tool: ToolIdentifier(
-                    rawValue: name
-                ),
+                name: name,
                 input: input
             )
         )
@@ -65,7 +63,7 @@ package struct AppleFoundationModelToolProxy: FoundationModels.Tool {
 package enum AppleFoundationModelToolBridge {
     package static func tools(
         for definitions: [ToolDescriptor],
-        resolver: any ToolCallResolver
+        resolver: any FunctionCallResolver
     ) throws -> [AppleFoundationModelToolProxy] {
         try definitions.map { definition in
             try AppleFoundationModelToolProxy(
@@ -79,7 +77,7 @@ package enum AppleFoundationModelToolBridge {
 @available(macOS 26.0, *)
 package enum AppleFoundationModelToolOutputRenderer {
     package static func render(
-        _ result: ToolCall.Response
+        _ result: ToolExecution.Response
     ) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [

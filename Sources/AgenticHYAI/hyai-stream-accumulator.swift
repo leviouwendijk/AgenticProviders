@@ -39,14 +39,7 @@ struct HYAIStreamAccumulator: Sendable {
         }
 
         if let chunkUsage = chunk.usage {
-            usage = .init(
-                inputTokens:
-                    chunkUsage.promptTokens,
-                outputTokens:
-                    chunkUsage.completionTokens,
-                totalTokens:
-                    chunkUsage.totalTokens
-            )
+            usage = chunkUsage.agentUsage
         }
 
         guard let choice = chunk.choices.first else {
@@ -67,7 +60,7 @@ struct HYAIStreamAccumulator: Sendable {
         }
 
         for providerCall
-            in choice.delta.toolCalls ?? []
+            in choice.delta.functionCalls ?? []
         {
             guard let index = providerCall.index else {
                 throw HYAIGatewayError.invalidToolCall
@@ -105,7 +98,7 @@ struct HYAIStreamAccumulator: Sendable {
             return events
         }
 
-        let toolCalls = try calls
+        let functionCalls = try calls
             .sorted {
                 $0.key < $1.key
             }
@@ -118,7 +111,7 @@ struct HYAIStreamAccumulator: Sendable {
                 )
             }
 
-        for call in toolCalls {
+        for call in functionCalls {
             events.append(
                 .toolcall(call)
             )
@@ -133,7 +126,7 @@ struct HYAIStreamAccumulator: Sendable {
         }
 
         blocks.append(
-            contentsOf: toolCalls.map {
+            contentsOf: functionCalls.map {
                 .tool_call($0)
             }
         )
@@ -149,7 +142,7 @@ struct HYAIStreamAccumulator: Sendable {
                 HYAIResponseMapper.stopReason(
                     finishReason,
                     hasToolCalls:
-                        !toolCalls.isEmpty
+                        !functionCalls.isEmpty
                 ),
             usage: usage,
             metadata:

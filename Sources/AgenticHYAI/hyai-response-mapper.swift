@@ -23,7 +23,7 @@ struct HYAIResponseMapper {
         }
 
         let calls = try mapToolCalls(
-            choice.message.toolCalls ?? []
+            choice.message.functionCalls ?? []
         )
         blocks.append(
             contentsOf: calls.map {
@@ -42,16 +42,7 @@ struct HYAIResponseMapper {
                 choice.finishReason,
                 hasToolCalls: !calls.isEmpty
             ),
-            usage: response.usage.map {
-                .init(
-                    inputTokens:
-                        $0.promptTokens,
-                    outputTokens:
-                        $0.completionTokens,
-                    totalTokens:
-                        $0.totalTokens
-                )
-            },
+            usage: response.usage?.agentUsage,
             metadata: baseMetadata(
                 requestedModel: requestedModel,
                 resolvedModel: response.model,
@@ -65,7 +56,7 @@ struct HYAIResponseMapper {
         id: String?,
         name: String?,
         arguments: String?
-    ) throws -> ToolCall {
+    ) throws -> FunctionCall {
         guard let id,
               !id.isEmpty,
               let name,
@@ -76,9 +67,7 @@ struct HYAIResponseMapper {
 
         return .init(
             id: id,
-            tool: .init(
-                rawValue: name
-            ),
+            name: name,
             input: try decodeArguments(
                 arguments
             )
@@ -142,7 +131,7 @@ struct HYAIResponseMapper {
 
     private static func mapToolCalls(
         _ calls: [HYAIToolCall]
-    ) throws -> [ToolCall] {
+    ) throws -> [FunctionCall] {
         try calls.map { call in
             try mapToolCall(
                 id: call.id,

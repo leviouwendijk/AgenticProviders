@@ -126,11 +126,9 @@ private extension BedrockStreamAccumulator {
             return []
         }
 
-        let call = ToolCall(
+        let call = FunctionCall(
             id: id,
-            tool: ToolIdentifier(
-                rawValue: name
-            ),
+            name: name,
             input: try toolInput(
                 id: id,
                 text: block.toolInput

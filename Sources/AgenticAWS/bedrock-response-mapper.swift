@@ -63,11 +63,9 @@ private extension BedrockResponseMapper {
 
         case .toolUse(let toolUse):
             return .tool_call(
-                ToolCall(
+                FunctionCall(
                     id: toolUse.toolUseId,
-                    tool: ToolIdentifier(
-                        rawValue: toolUse.name
-                    ),
+                    name: toolUse.name,
                     input: toolUse.input
                 )
             )

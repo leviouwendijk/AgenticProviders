@@ -30,20 +30,20 @@ struct OllamaChatMessage: Sendable, Codable {
     let role: String
     let content: String
     let thinking: String?
-    let toolCalls: [OllamaToolCall]?
+    let functionCalls: [OllamaToolCall]?
     let toolName: String?
 
     init(
         role: String,
         content: String = "",
         thinking: String? = nil,
-        toolCalls: [OllamaToolCall]? = nil,
+        functionCalls: [OllamaToolCall]? = nil,
         toolName: String? = nil
     ) {
         self.role = role
         self.content = content
         self.thinking = thinking
-        self.toolCalls = toolCalls
+        self.functionCalls = functionCalls
         self.toolName = toolName
     }
 
@@ -51,7 +51,7 @@ struct OllamaChatMessage: Sendable, Codable {
         case role
         case content
         case thinking
-        case toolCalls = "tool_calls"
+        case functionCalls = "tool_calls"
         case toolName = "tool_name"
     }
 }

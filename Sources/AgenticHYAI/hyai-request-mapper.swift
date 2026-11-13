@@ -97,7 +97,7 @@ private struct HYAIMessageMapper {
                     .init(
                         role: message.role.rawValue,
                         content: try textOnly(message),
-                        toolCalls: nil,
+                        functionCalls: nil,
                         toolCallId: nil
                     )
                 )
@@ -118,7 +118,7 @@ private struct HYAIMessageMapper {
                                 id: call.id,
                                 type: "function",
                                 function: .init(
-                                    name: call.tool.rawValue,
+                                    name: call.name,
                                     arguments: try jsonString(
                                         call.input
                                     )
@@ -147,7 +147,7 @@ private struct HYAIMessageMapper {
                         role: "assistant",
                         content:
                             text.isEmpty ? nil : text,
-                        toolCalls:
+                        functionCalls:
                             calls.isEmpty ? nil : calls,
                         toolCallId: nil
                     )
@@ -168,7 +168,7 @@ private struct HYAIMessageMapper {
                             content: try jsonString(
                                 result.output
                             ),
-                            toolCalls: nil,
+                            functionCalls: nil,
                             toolCallId:
                                 result.call.id
                         )

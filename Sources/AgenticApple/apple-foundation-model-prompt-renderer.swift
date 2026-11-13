@@ -85,7 +85,7 @@ private extension AppleFoundationModelPromptRenderer {
 
         case .tool_call(let call):
             return """
-            Prior tool request: \(call.tool.rawValue)
+            Prior tool request: \(call.name)
             Input: \(try json(call.input))
             """
 

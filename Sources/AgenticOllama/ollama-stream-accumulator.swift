@@ -2,7 +2,7 @@ import Agentic
 
 struct OllamaStreamAccumulator: Sendable {
     private var text = ""
-    private var calls: [ToolCall] = []
+    private var calls: [FunctionCall] = []
     private var emittedCallIDs: Set<String> = []
     private var response: AgentResponse?
     private let baseMetadata: [String: String]
@@ -19,13 +19,11 @@ struct OllamaStreamAccumulator: Sendable {
             events.append(.messagedelta(.text(delta)))
         }
 
-        if let providerCalls = chunk.message?.toolCalls {
+        if let providerCalls = chunk.message?.functionCalls {
             for providerCall in providerCalls where !emittedCallIDs.contains(providerCall.id) {
-                let call = ToolCall(
+                let call = FunctionCall(
                     id: providerCall.id,
-                    tool: ToolIdentifier(
-                        rawValue: providerCall.function.name
-                    ),
+                    name: providerCall.function.name,
                     input: providerCall.function.arguments
                 )
                 emittedCallIDs.insert(providerCall.id)

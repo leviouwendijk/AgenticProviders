@@ -179,7 +179,7 @@ extension AgenticProvidersFlowTesting {
             "tool id"
         )
         try Expect.equal(
-            call.tool.rawValue,
+            call.name,
             "gateway_scratchpad_put",
             "tool name"
         )
@@ -700,8 +700,8 @@ private enum BedrockFlowFixture {
 
 private func onlyToolCall(
     _ events: [AgentStreamEvent]
-) throws -> ToolCall {
-    let calls = events.compactMap { event -> ToolCall? in
+) throws -> FunctionCall {
+    let calls = events.compactMap { event -> FunctionCall? in
         guard case .toolcall(let call) = event else {
             return nil
         }

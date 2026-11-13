@@ -126,4 +126,8 @@ public struct HYAIModelProvider: AgentModelProvider {
             ),
         ]
     }
+
+    public func pricingSnapshots() throws -> [ModelPricingSnapshot] {
+        try HYAIModelCatalog.pricingSnapshots()
+    }
 }

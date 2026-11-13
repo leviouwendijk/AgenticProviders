@@ -141,7 +141,7 @@ private extension AppleFoundationModelResponseProvider {
         _ prepared: AppleFoundationModelInvocation
     ) async throws -> String {
         let request = prepared.request
-        let resolver = prepared.context.toolCallResolver
+        let resolver = prepared.context.functionCallResolver
         let model: SystemLanguageModel
 
         switch prepared.model {

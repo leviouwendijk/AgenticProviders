@@ -5,10 +5,6 @@ public extension AgenticAWS {
     struct ModelAPI: Sendable {
         public init() {}
 
-        public var tool: ToolAPI {
-            .init()
-        }
-
         public var profile: ProfileAPI {
             .init()
         }
@@ -23,14 +19,6 @@ public extension AgenticAWS {
             try await discovery().handles(
                 options: options
             )
-        }
-    }
-
-    struct ModelToolAPI: Sendable {
-        public init() {}
-
-        public func set() throws -> BedrockModelDiscoveryToolSet {
-            try .resolve()
         }
     }
 
@@ -76,6 +64,5 @@ public extension AgenticAWS {
 }
 
 public extension AgenticAWS.ModelAPI {
-    typealias ToolAPI = AgenticAWS.ModelToolAPI
     typealias ProfileAPI = AgenticAWS.ModelProfileAPI
 }

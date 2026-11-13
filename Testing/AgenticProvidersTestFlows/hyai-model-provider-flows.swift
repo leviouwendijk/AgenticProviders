@@ -258,6 +258,36 @@ extension AgenticProvidersFlowTesting {
         let profiles = try HYAIModelProfileProvider().profiles()
         let physical = profiles.filter { $0.model != "hyai/auto" }
         let pricing = try HYAIModelCatalog.pricingSnapshots()
+        let provider = HYAIModelProvider(
+            apiKeySymbol: "AGENTIC_TEST_MISSING_HYAI_KEY_\(UUID().uuidString)"
+        )
+        let catalogs = try await ModelCatalogs(
+            modelProviders: [provider]
+        )
+
+        try Expect.equal(
+            catalogs.pricing.snapshots.count,
+            16,
+            "All provider pricing snapshots enter ModelCatalogs"
+        )
+        try Expect.equal(
+            catalogs.pricing.snapshots[
+                .init(provider: "hostyourai", model: "hyai/auto")
+            ] == nil,
+            true,
+            "Virtual auto routing has no invented fixed price"
+        )
+        let composed = try catalogs.pricing.pricing(
+            for: .init(
+                provider: "hostyourai",
+                model: "deepseek-ai/DeepSeek-V4.1-Flash-1017"
+            )
+        )
+        try Expect.equal(
+            composed.component(.outputTokens)?.priceMicros ?? -1,
+            Int64(1720000),
+            "Prices are resolvable through the installed provider catalog"
+        )
 
         try Expect.equal(
             profiles.count,

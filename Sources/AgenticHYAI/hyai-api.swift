@@ -1,3 +1,4 @@
+import Agentic
 import Primitives
 
 struct HYAIChatRequest: Sendable, Codable {
@@ -20,7 +21,7 @@ struct HYAIRouterOptions: Sendable, Codable {
 struct HYAIChatMessage: Sendable, Codable {
     let role: String
     let content: String?
-    let toolCalls: [HYAIToolCall]?
+    let functionCalls: [HYAIToolCall]?
     let toolCallId: String?
 }
 
@@ -71,11 +72,44 @@ struct HYAIChatCompletionChunkChoice: Sendable, Codable {
 
 struct HYAIChatCompletionDelta: Sendable, Codable {
     let content: String?
-    let toolCalls: [HYAIToolCall]?
+    let functionCalls: [HYAIToolCall]?
 }
 
+/// OpenAI-shaped usage: promptTokens includes cached and cache-created tokens,
+/// completionTokens includes reasoning tokens.
 struct HYAIUsage: Sendable, Codable {
     let promptTokens: Int?
     let completionTokens: Int?
     let totalTokens: Int?
+    let promptTokensDetails: HYAIPromptTokensDetails?
+    let completionTokensDetails: HYAICompletionTokensDetails?
+}
+
+struct HYAIPromptTokensDetails: Sendable, Codable {
+    let cachedTokens: Int?
+    let createdCacheTokens: Int?
+}
+
+struct HYAICompletionTokensDetails: Sendable, Codable {
+    let reasoningTokens: Int?
+}
+
+extension HYAIUsage {
+    /// Normalize to AgentUsage, where inputTokens excludes cache reads and writes.
+    var agentUsage: AgentUsage {
+        let cachedRead = promptTokensDetails?.cachedTokens
+        let cachedWrite = promptTokensDetails?.createdCacheTokens
+        let input = promptTokens.map {
+            max(0, $0 - (cachedRead ?? 0) - (cachedWrite ?? 0))
+        }
+
+        return .init(
+            inputTokens: input,
+            outputTokens: completionTokens,
+            totalTokens: totalTokens,
+            cachedInputReadTokens: cachedRead,
+            cachedInputWriteTokens: cachedWrite,
+            reasoningOutputTokens: completionTokensDetails?.reasoningTokens
+        )
+    }
 }
