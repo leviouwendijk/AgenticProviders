@@ -135,11 +135,11 @@ private extension BedrockStreamAccumulator {
             )
         )
 
-        block.final = .tool_call(call)
+        block.final = .call(call)
         blocks[stop.contentBlockIndex] = block
 
         return [
-            .toolcall(call)
+            .call(call)
         ]
     }
 

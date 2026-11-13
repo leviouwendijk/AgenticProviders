@@ -90,7 +90,7 @@ public struct AppleFoundationModelResponseProvider: AgentModelResponseProviding 
                                 .messagedelta(.text(text))
                             )
 
-                        case .tool_call:
+                        case .call:
                             continuation.yield(
                                 .messagedelta(block)
                             )

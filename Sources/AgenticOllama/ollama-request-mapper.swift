@@ -62,7 +62,7 @@ private struct OllamaMessageMapper {
                     switch block {
                     case .text(let value):
                         text += value
-                    case .tool_call(let call):
+                    case .call(let call):
                         calls.append(
                             .init(
                                 id: call.id,
@@ -73,7 +73,7 @@ private struct OllamaMessageMapper {
                                 )
                             )
                         )
-                    case .resource, .tool_result:
+                    case .resource, .result:
                         throw OllamaGatewayError.unsupportedContent(message.role)
                     }
                 }
@@ -92,7 +92,7 @@ private struct OllamaMessageMapper {
 
             case .tool:
                 for block in message.content.blocks {
-                    guard case .tool_result(let result) = block else {
+                    guard case .result(let result) = block else {
                         throw OllamaGatewayError.unsupportedContent(message.role)
                     }
 

@@ -127,11 +127,11 @@ extension AgenticProvidersFlowTesting {
                 .init(role: .user, text: "Read the example file."),
                 .init(
                     role: .assistant,
-                    content: .init(blocks: [.tool_call(priorCall)])
+                    content: .init(blocks: [.call(priorCall)])
                 ),
                 .init(
                     role: .tool,
-                    content: .init(blocks: [.tool_result(priorResult)])
+                    content: .init(blocks: [.result(priorResult)])
                 ),
             ],
             tools: [definition]

@@ -159,7 +159,7 @@ package enum AppleFoundationModelTranscriptMapper {
                 var calls: [Transcript.ToolCall] = []
 
                 for block in message.content.blocks {
-                    guard case .tool_call(let call) = block else {
+                    guard case .call(let call) = block else {
                         continue
                     }
 
@@ -187,7 +187,7 @@ package enum AppleFoundationModelTranscriptMapper {
 
             case .tool:
                 for block in message.content.blocks {
-                    guard case .tool_result(let result) = block else {
+                    guard case .result(let result) = block else {
                         continue
                     }
 

@@ -228,7 +228,7 @@ extension AgenticProvidersFlowTesting {
                     role: .tool,
                     content: .init(
                         blocks: [
-                            .tool_result(
+                            .result(
                                 .init(
                                     call: .init(
                                         id: "tool-1",
@@ -239,7 +239,7 @@ extension AgenticProvidersFlowTesting {
                                     ])
                                 )
                             ),
-                            .tool_result(
+                            .result(
                                 .init(
                                     call: .init(
                                         id: "tool-2",
@@ -702,7 +702,7 @@ private func onlyToolCall(
     _ events: [AgentStreamEvent]
 ) throws -> FunctionCall {
     let calls = events.compactMap { event -> FunctionCall? in
-        guard case .toolcall(let call) = event else {
+        guard case .call(let call) = event else {
             return nil
         }
 

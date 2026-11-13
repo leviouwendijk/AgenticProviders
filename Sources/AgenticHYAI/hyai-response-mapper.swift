@@ -27,7 +27,7 @@ struct HYAIResponseMapper {
         )
         blocks.append(
             contentsOf: calls.map {
-                .tool_call($0)
+                .call($0)
             }
         )
 

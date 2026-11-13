@@ -83,13 +83,13 @@ private extension AppleFoundationModelPromptRenderer {
         case .resource:
             return nil
 
-        case .tool_call(let call):
+        case .call(let call):
             return """
             Prior tool request: \(call.name)
             Input: \(try json(call.input))
             """
 
-        case .tool_result(let result):
+        case .result(let result):
             let name = result.call.tool.rawValue
             let status = result.isError
                 ? "error"

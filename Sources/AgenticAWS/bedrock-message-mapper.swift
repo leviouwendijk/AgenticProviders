@@ -103,7 +103,7 @@ private extension BedrockMessageMapper {
         _ message: Message
     ) throws -> Bedrock.Converse.Message {
         let content = try message.content.blocks.map { block in
-            guard case .tool_result(let result) = block else {
+            guard case .result(let result) = block else {
                 throw BedrockGatewayError.unsupportedContent(
                     message.role
                 )
@@ -180,7 +180,7 @@ private extension BedrockMessageMapper {
                 modality: resource.modality
             )
 
-        case .tool_call(let call):
+        case .call(let call):
             guard role == .assistant else {
                 throw BedrockGatewayError.unsupportedContent(
                     role
@@ -193,7 +193,7 @@ private extension BedrockMessageMapper {
                 )
             )
 
-        case .tool_result(let result):
+        case .result(let result):
             guard role == .user else {
                 throw BedrockGatewayError.unsupportedContent(
                     role

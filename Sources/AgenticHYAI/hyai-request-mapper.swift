@@ -111,7 +111,7 @@ private struct HYAIMessageMapper {
                     case .text(let value):
                         text += value
 
-                    case .tool_call(let call):
+                    case .call(let call):
                         calls.append(
                             .init(
                                 index: nil,
@@ -127,7 +127,7 @@ private struct HYAIMessageMapper {
                         )
 
                     case .resource,
-                         .tool_result:
+                         .result:
                         throw HYAIGatewayError
                             .unsupportedContent(
                                 message.role
@@ -155,7 +155,7 @@ private struct HYAIMessageMapper {
 
             case .tool:
                 for block in message.content.blocks {
-                    guard case .tool_result(let result) = block else {
+                    guard case .result(let result) = block else {
                         throw HYAIGatewayError
                             .unsupportedContent(
                                 message.role

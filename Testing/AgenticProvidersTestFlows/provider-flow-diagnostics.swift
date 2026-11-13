@@ -72,10 +72,10 @@ private extension ProviderFlowDiagnostics {
             case .messagedelta(let block):
                 return "delta: \(block)"
 
-            case .toolcall(let call):
+            case .call(let call):
                 return "toolcall: \(call.name) id=\(call.id) input=\(call.input)"
 
-            case .toolresult(let result):
+            case .result(let result):
                 return "toolresult: \(result.call.tool.rawValue) id=\(result.call.id) output=\(result.output)"
 
             case .completed(let response):

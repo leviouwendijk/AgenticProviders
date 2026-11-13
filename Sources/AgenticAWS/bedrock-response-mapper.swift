@@ -62,7 +62,7 @@ private extension BedrockResponseMapper {
             return .text(text)
 
         case .toolUse(let toolUse):
-            return .tool_call(
+            return .call(
                 FunctionCall(
                     id: toolUse.toolUseId,
                     name: toolUse.name,

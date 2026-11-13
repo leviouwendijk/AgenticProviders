@@ -113,7 +113,7 @@ struct HYAIStreamAccumulator: Sendable {
 
         for call in functionCalls {
             events.append(
-                .toolcall(call)
+                .call(call)
             )
         }
 
@@ -127,7 +127,7 @@ struct HYAIStreamAccumulator: Sendable {
 
         blocks.append(
             contentsOf: functionCalls.map {
-                .tool_call($0)
+                .call($0)
             }
         )
 

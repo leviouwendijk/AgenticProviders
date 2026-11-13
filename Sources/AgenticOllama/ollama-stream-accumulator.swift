@@ -28,7 +28,7 @@ struct OllamaStreamAccumulator: Sendable {
                 )
                 emittedCallIDs.insert(providerCall.id)
                 calls.append(call)
-                events.append(.toolcall(call))
+                events.append(.call(call))
             }
         }
 
@@ -40,7 +40,7 @@ struct OllamaStreamAccumulator: Sendable {
         if !text.isEmpty {
             blocks.append(.text(text))
         }
-        blocks.append(contentsOf: calls.map { .tool_call($0) })
+        blocks.append(contentsOf: calls.map { .call($0) })
 
         var metadata = baseMetadata
         if let model = chunk.model { metadata["model"] = model }
