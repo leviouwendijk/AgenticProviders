@@ -16,12 +16,12 @@ private actor AppleFoundationModelToolResolverProbe:
 
     func resolve(
         _ call: FunctionCall
-    ) async throws -> ToolExecution.Response {
+    ) async throws -> FunctionCall.Response {
         calls.append(
             call
         )
 
-        return ToolExecution.Response(
+        return FunctionCall.Response(
             call: call.reference,
             output: .object([
                 "text": .string("let value = 42")
@@ -115,7 +115,7 @@ extension AgenticProvidersFlowTesting {
                 "path": .string("Sources/example.swift")
             ])
         )
-        let priorResult = ToolExecution.Response(
+        let priorResult = FunctionCall.Response(
             call: priorCall.reference,
             output: .object([
                 "text": .string("let value = 42")

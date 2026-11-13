@@ -191,7 +191,7 @@ package enum AppleFoundationModelTranscriptMapper {
                         continue
                     }
 
-                    let toolName = result.call.tool.rawValue
+                    let toolName = result.call.name
 
                     let output = try toolOutputText(
                         result
@@ -257,7 +257,7 @@ private extension AppleFoundationModelTranscriptMapper {
     }
 
     static func toolOutputText(
-        _ result: ToolExecution.Response
+        _ result: FunctionCall.Response
     ) throws -> String {
         let output = try json(
             result.output

@@ -41,7 +41,7 @@ enum BedrockToolMapper {
     }
 
     static func map(
-        _ result: ToolExecution.Response
+        _ result: FunctionCall.Response
     ) -> Bedrock.Converse.ToolResult {
         .init(
             toolUseId: result.call.id,

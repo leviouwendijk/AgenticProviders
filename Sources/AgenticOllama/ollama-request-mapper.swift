@@ -96,7 +96,7 @@ private struct OllamaMessageMapper {
                         throw OllamaGatewayError.unsupportedContent(message.role)
                     }
 
-                    let name = result.call.tool.rawValue
+                    let name = result.call.name
                     guard !name.isEmpty else {
                         throw OllamaGatewayError.missingToolName(result.call.id)
                     }
@@ -129,7 +129,7 @@ private struct OllamaMessageMapper {
         return text
     }
 
-    private static func toolResultText(_ result: ToolExecution.Response) -> String {
+    private static func toolResultText(_ result: FunctionCall.Response) -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys]
         let rendered: String

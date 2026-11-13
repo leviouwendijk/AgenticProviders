@@ -90,7 +90,7 @@ private extension AppleFoundationModelPromptRenderer {
             """
 
         case .result(let result):
-            let name = result.call.tool.rawValue
+            let name = result.call.name
             let status = result.isError
                 ? "error"
                 : "success"

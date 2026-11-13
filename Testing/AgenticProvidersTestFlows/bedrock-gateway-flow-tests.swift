@@ -232,7 +232,7 @@ extension AgenticProvidersFlowTesting {
                                 .init(
                                     call: .init(
                                         id: "tool-1",
-                                        tool: "gateway_scratchpad_put"
+                                        name: "gateway_scratchpad_put"
                                     ),
                                     output: .object([
                                         "ok": .bool(true)
@@ -243,7 +243,7 @@ extension AgenticProvidersFlowTesting {
                                 .init(
                                     call: .init(
                                         id: "tool-2",
-                                        tool: "fixture_tool"
+                                        name: "fixture_tool"
                                     ),
                                     output: .object([
                                         "kind": .string("tool_error"),

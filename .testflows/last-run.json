@@ -3,12 +3,12 @@
   "failed_names" : [
 
   ],
-  "generated_at" : "2026-11-13T15:28:32Z",
+  "generated_at" : "2026-11-13T15:41:32Z",
   "passed" : 20,
   "results" : [
     {
       "display_name" : "apple-prompt-rendering",
-      "duration_seconds" : 0.0008790493011474609,
+      "duration_seconds" : 0.001134037971496582,
       "name" : "apple-prompt-rendering",
       "status" : "passed",
       "tags" : [
@@ -19,7 +19,7 @@
     },
     {
       "display_name" : "apple-tool-bridge",
-      "duration_seconds" : 0.006534934043884277,
+      "duration_seconds" : 0.0066100358963012695,
       "name" : "apple-tool-bridge",
       "status" : "passed",
       "tags" : [
@@ -31,7 +31,7 @@
     },
     {
       "display_name" : "apple-structured-output-lowering",
-      "duration_seconds" : 0.0006439685821533203,
+      "duration_seconds" : 0.0003629922866821289,
       "name" : "apple-structured-output-lowering",
       "status" : "passed",
       "tags" : [
@@ -43,7 +43,7 @@
     },
     {
       "display_name" : "apple-model-provider-catalog-realization",
-      "duration_seconds" : 0.00036203861236572266,
+      "duration_seconds" : 0.0005170106887817383,
       "name" : "apple-model-provider-catalog-realization",
       "status" : "passed",
       "tags" : [
@@ -56,7 +56,7 @@
     },
     {
       "display_name" : "ollama-missing-configuration-availability",
-      "duration_seconds" : 0.0002809762954711914,
+      "duration_seconds" : 0.00035893917083740234,
       "name" : "ollama-missing-configuration-availability",
       "status" : "passed",
       "tags" : [
@@ -69,7 +69,7 @@
     },
     {
       "display_name" : "hyai-missing-configuration-availability",
-      "duration_seconds" : 0.00016295909881591797,
+      "duration_seconds" : 9.09566879272461e-05,
       "name" : "hyai-missing-configuration-availability",
       "status" : "passed",
       "tags" : [
@@ -82,7 +82,7 @@
     },
     {
       "display_name" : "hyai-auto-profile-semantics",
-      "duration_seconds" : 8.296966552734375e-05,
+      "duration_seconds" : 5.4001808166503906e-05,
       "name" : "hyai-auto-profile-semantics",
       "status" : "passed",
       "tags" : [
@@ -94,7 +94,7 @@
     },
     {
       "display_name" : "hyai-explicit-model-profile-semantics",
-      "duration_seconds" : 0.00030100345611572266,
+      "duration_seconds" : 0.0001939535140991211,
       "name" : "hyai-explicit-model-profile-semantics",
       "status" : "passed",
       "tags" : [
@@ -107,7 +107,7 @@
     },
     {
       "display_name" : "hyai-curated-catalog-semantics",
-      "duration_seconds" : 0.0005290508270263672,
+      "duration_seconds" : 0.000599980354309082,
       "name" : "hyai-curated-catalog-semantics",
       "status" : "passed",
       "tags" : [
@@ -119,7 +119,7 @@
     },
     {
       "display_name" : "bedrock-model-provider-catalog-realization",
-      "duration_seconds" : 7.402896881103516e-05,
+      "duration_seconds" : 5.996227264404297e-05,
       "name" : "bedrock-model-provider-catalog-realization",
       "status" : "passed",
       "tags" : [
@@ -132,7 +132,7 @@
     },
     {
       "display_name" : "bedrock-multiple-gateway-provider-realization",
-      "duration_seconds" : 2.300739288330078e-05,
+      "duration_seconds" : 5.4001808166503906e-05,
       "name" : "bedrock-multiple-gateway-provider-realization",
       "status" : "passed",
       "tags" : [
@@ -146,7 +146,7 @@
     },
     {
       "display_name" : "bedrock-buffered-stream-completion",
-      "duration_seconds" : 0.00028908252716064453,
+      "duration_seconds" : 0.00022602081298828125,
       "name" : "bedrock-buffered-stream-completion",
       "status" : "passed",
       "tags" : [
@@ -158,7 +158,7 @@
     },
     {
       "display_name" : "bedrock-tool-use-stream",
-      "duration_seconds" : 0.0010690689086914062,
+      "duration_seconds" : 0.0005269050598144531,
       "name" : "bedrock-tool-use-stream",
       "status" : "passed",
       "tags" : [
@@ -171,7 +171,7 @@
     },
     {
       "display_name" : "bedrock-tool-result-mapping",
-      "duration_seconds" : 0.0001310110092163086,
+      "duration_seconds" : 5.4955482482910156e-05,
       "name" : "bedrock-tool-result-mapping",
       "status" : "passed",
       "tags" : [
@@ -183,7 +183,7 @@
     },
     {
       "display_name" : "bedrock-model-handle-profile-synthesis",
-      "duration_seconds" : 8.594989776611328e-05,
+      "duration_seconds" : 4.00543212890625e-05,
       "name" : "bedrock-model-handle-profile-synthesis",
       "status" : "passed",
       "tags" : [
@@ -196,7 +196,7 @@
     },
     {
       "display_name" : "bedrock-non-streaming-handle-drops-streaming-capability",
-      "duration_seconds" : 0.00010800361633300781,
+      "duration_seconds" : 7.605552673339844e-05,
       "name" : "bedrock-non-streaming-handle-drops-streaming-capability",
       "status" : "passed",
       "tags" : [
@@ -209,7 +209,7 @@
     },
     {
       "display_name" : "bedrock-generic-snapshot-provider-catalog",
-      "duration_seconds" : 4.303455352783203e-05,
+      "duration_seconds" : 3.1948089599609375e-05,
       "name" : "bedrock-generic-snapshot-provider-catalog",
       "status" : "passed",
       "tags" : [
@@ -222,7 +222,7 @@
     },
     {
       "display_name" : "bedrock-discovery-tool-registration",
-      "duration_seconds" : 0.00011301040649414062,
+      "duration_seconds" : 5.1975250244140625e-05,
       "name" : "bedrock-discovery-tool-registration",
       "status" : "passed",
       "tags" : [
@@ -235,7 +235,7 @@
     },
     {
       "display_name" : "bedrock-structured-output-lowering",
-      "duration_seconds" : 9.799003601074219e-05,
+      "duration_seconds" : 5.996227264404297e-05,
       "name" : "bedrock-structured-output-lowering",
       "status" : "passed",
       "tags" : [
@@ -247,7 +247,7 @@
     },
     {
       "display_name" : "bedrock-live-nested-profile-api",
-      "duration_seconds" : 7.9890758991241455,
+      "duration_seconds" : 7.90535295009613,
       "name" : "bedrock-live-nested-profile-api",
       "status" : "passed",
       "tags" : [

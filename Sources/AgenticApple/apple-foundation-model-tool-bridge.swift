@@ -77,7 +77,7 @@ package enum AppleFoundationModelToolBridge {
 @available(macOS 26.0, *)
 package enum AppleFoundationModelToolOutputRenderer {
     package static func render(
-        _ result: ToolExecution.Response
+        _ result: FunctionCall.Response
     ) throws -> String {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [
