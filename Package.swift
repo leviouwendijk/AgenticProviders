@@ -25,9 +25,16 @@ let package = Package(
             targets: ["AgenticHYAI"]
         ),
 
+        .library(
+            name: "AgenticOpenAI",
+            targets: ["AgenticOpenAI"]
+        ),
+        .library(
+            name: "AgenticAnthropic",
+            targets: ["AgenticAnthropic"]
+        ),
+
         // PACKAGES TO DO:
-        // ....AgenticAnthropic
-        // ....AgenticOpenAI
         // ....AgenticGoogle
         // ....AgenticMeta
 
@@ -88,6 +95,27 @@ let package = Package(
             ]
         ),
 
+        .target(
+            name: "AgenticOpenAI",
+            dependencies: [
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "AgenticModels", package: "Agentic"),
+                .product(name: "Primitives", package: "Primitives"),
+                .product(name: "Milieu", package: "Milieu"),
+                .product(name: "Schema", package: "Schema"),
+            ]
+        ),
+        .target(
+            name: "AgenticAnthropic",
+            dependencies: [
+                .product(name: "Agentic", package: "Agentic"),
+                .product(name: "AgenticModels", package: "Agentic"),
+                .product(name: "Primitives", package: "Primitives"),
+                .product(name: "Milieu", package: "Milieu"),
+                .product(name: "Schema", package: "Schema"),
+            ]
+        ),
+
         .executableTarget(
             name: "AgenticProvidersTestFlows",
             dependencies: [
@@ -95,6 +123,8 @@ let package = Package(
                 "AgenticAWS",
                 "AgenticOllama",
                 "AgenticHYAI",
+                "AgenticOpenAI",
+                "AgenticAnthropic",
                 .product(name: "Agentic", package: "Agentic"),
                 .product(name: "AgenticModels", package: "Agentic"),
                 .product(name: "Primitives", package: "Primitives"),
