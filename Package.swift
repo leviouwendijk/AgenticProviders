@@ -96,8 +96,15 @@ let package = Package(
         ),
 
         .target(
+            name: "AgenticProviderHTTP",
+            dependencies: [
+                .product(name: "Primitives", package: "Primitives"),
+            ]
+        ),
+        .target(
             name: "AgenticOpenAI",
             dependencies: [
+                "AgenticProviderHTTP",
                 .product(name: "Agentic", package: "Agentic"),
                 .product(name: "AgenticModels", package: "Agentic"),
                 .product(name: "Primitives", package: "Primitives"),
@@ -108,6 +115,7 @@ let package = Package(
         .target(
             name: "AgenticAnthropic",
             dependencies: [
+                "AgenticProviderHTTP",
                 .product(name: "Agentic", package: "Agentic"),
                 .product(name: "AgenticModels", package: "Agentic"),
                 .product(name: "Primitives", package: "Primitives"),
@@ -125,6 +133,7 @@ let package = Package(
                 "AgenticHYAI",
                 "AgenticOpenAI",
                 "AgenticAnthropic",
+                "AgenticProviderHTTP",
                 .product(name: "Agentic", package: "Agentic"),
                 .product(name: "AgenticModels", package: "Agentic"),
                 .product(name: "Primitives", package: "Primitives"),

@@ -4,6 +4,15 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
     static let title = "AgenticProviders flow tests"
 
     static let flows: [TestFlow] = [
+        TestFlow(ID.native_provider_wire_contracts, tags: ["openai", "anthropic", "offline", "wire"]) {
+            try AgenticProvidersFlowTesting.runNativeProviderWireContracts()
+        },
+        TestFlow(ID.native_provider_continuation, tags: ["openai", "anthropic", "offline", "continuation"]) {
+            try AgenticProvidersFlowTesting.runNativeProviderContinuation()
+        },
+        TestFlow(ID.anthropic_native_stream, tags: ["anthropic", "offline", "stream"]) {
+            try AgenticProvidersFlowTesting.runAnthropicNativeStream()
+        },
         TestFlow(
             ID.apple_prompt_rendering,
             tags: ["apple", "foundation-models", "offline"]
@@ -153,6 +162,9 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
 
 extension AgenticProvidersFlowSuite {
     enum ID {
+        static let native_provider_wire_contracts = "native-provider-wire-contracts"
+        static let native_provider_continuation = "native-provider-continuation"
+        static let anthropic_native_stream = "anthropic-native-stream"
         static let apple_prompt_rendering = "apple-prompt-rendering"
         static let apple_tool_bridge = "apple-tool-bridge"
         static let apple_structured_output_lowering = "apple-structured-output-lowering"
