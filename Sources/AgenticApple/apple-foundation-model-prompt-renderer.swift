@@ -97,7 +97,7 @@ private extension AppleFoundationModelPromptRenderer {
 
             return """
             Prior tool outcome: \(name) (\(status))
-            Output: \(try json(result.output))
+            Output: \(result.modelText)
             """
         }
     }

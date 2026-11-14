@@ -259,9 +259,7 @@ private extension AppleFoundationModelTranscriptMapper {
     static func toolOutputText(
         _ result: FunctionCall.Response
     ) throws -> String {
-        let output = try json(
-            result.output
-        )
+        let output = result.modelText
 
         guard result.isError else {
             return output

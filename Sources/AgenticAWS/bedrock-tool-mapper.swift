@@ -47,9 +47,7 @@ enum BedrockToolMapper {
             toolUseId: result.call.id,
             content: [
                 .text(
-                    toolResultText(
-                        result.output
-                    )
+                    result.modelText
                 )
             ],
             status: result.isError ? .error : .success

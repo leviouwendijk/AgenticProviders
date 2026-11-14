@@ -19,6 +19,14 @@ extension AgenticProvidersFlowTesting {
             .init(id: "t0", role: .tool, content: .init(blocks: [
                 .result(.init(call: call.reference, output: .string("# Readme"))),
             ])),
+            .init(id: "t1", role: .tool, content: .init(blocks: [
+                .result(
+                    FunctionCall.Response(
+                        call: call.reference,
+                        output: .object(["entries": .array([.string("Sources/a.swift")])])
+                    ).rendered("Sources/\n    a.swift")
+                ),
+            ])),
         ])
         let mapped = try HYAIRequestMapper.map(
             request,
@@ -35,6 +43,13 @@ extension AgenticProvidersFlowTesting {
         try Expect.true(
             json.contains(#""stream_options":{"include_usage":true}"#),
             "Streams ask for usage"
+        )
+
+        try Expect.equal(mapped.messages[2].content, ##""# Readme""##, "Unrendered results stay JSON")
+        try Expect.equal(
+            mapped.messages[3].content,
+            "Sources/\n    a.swift",
+            "A rendered result is sent as its text, not as a JSON string"
         )
 
         let assistant = mapped.messages[1]

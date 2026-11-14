@@ -166,9 +166,7 @@ private struct HYAIMessageMapper {
                     mapped.append(
                         .init(
                             role: "tool",
-                            content: try jsonString(
-                                result.output
-                            ),
+                            content: result.modelText,
                             toolCalls: nil,
                             toolCallId:
                                 result.call.id

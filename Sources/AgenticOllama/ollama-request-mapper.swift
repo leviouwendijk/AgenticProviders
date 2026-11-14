@@ -130,15 +130,7 @@ private struct OllamaMessageMapper {
     }
 
     private static func toolResultText(_ result: FunctionCall.Response) -> String {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.sortedKeys]
-        let rendered: String
-        if let data = try? encoder.encode(result.output),
-           let text = String(data: data, encoding: .utf8) {
-            rendered = text
-        } else {
-            rendered = String(describing: result.output)
-        }
+        let rendered = result.modelText
         return result.isError ? "Tool execution failed: \(rendered)" : rendered
     }
 }
