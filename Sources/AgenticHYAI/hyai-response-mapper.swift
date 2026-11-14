@@ -80,13 +80,22 @@ struct HYAIResponseMapper {
             throw HYAIGatewayError.invalidToolCall
         }
 
-        return .init(
-            id: id,
-            name: name,
-            input: try decodeArguments(
-                arguments
+        do {
+            return .init(
+                id: id,
+                name: name,
+                input: try decodeArguments(
+                    arguments
+                )
             )
-        )
+        } catch HYAIGatewayError.invalidToolArguments(let raw) {
+            // The run answers it, so the model can emit it again.
+            return .init(
+                id: id,
+                name: name,
+                malformedArguments: raw
+            )
+        }
     }
 
     static func baseMetadata(

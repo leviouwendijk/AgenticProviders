@@ -79,6 +79,13 @@ extension AgenticProvidersFlowTesting {
             "A tool-only message carries its call"
         )
 
+        let broken = try HYAIResponseMapper.mapToolCall(id: "call_2", name: "ask_user", arguments: #"{"input": {"#)
+        try Expect.equal(
+            broken.malformedArguments,
+            #"{"input": {"#,
+            "Unparseable arguments keep the call, marked, for the run to answer"
+        )
+
         let empty = try HYAICodec.decode(
             HYAIChatCompletionResponse.self,
             from: Data(#"{"choices":[{"finish_reason":"tool_calls","message":{"role":"assistant","content":"\n\n"}}]}"#.utf8)
