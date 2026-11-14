@@ -54,32 +54,6 @@ enum BedrockToolMapper {
         )
     }
 
-    static func toolResultText(
-        _ output: JSONValue
-    ) -> String {
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [
-            .sortedKeys
-        ]
-
-        do {
-            let data = try encoder.encode(
-                output
-            )
-
-            if let text = String(
-                data: data,
-                encoding: .utf8
-            ) {
-                return text
-            }
-        } catch {}
-
-        return String(
-            describing: output
-        )
-    }
-
     private static let defaultSchema: JSONValue = .object([
         "type": .string("object"),
         "properties": .object([:])
