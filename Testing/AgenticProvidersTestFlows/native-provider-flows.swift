@@ -121,4 +121,76 @@ extension AgenticProvidersFlowTesting {
             }, "Final response emitted")
         return [.field("events", String(outputs.count))]
     }
+
+    static func runNativeProviderSSEFraming() throws -> [TestDiagnostic] {
+        let expected: [(name: String, json: String)] = [
+            ("message_start", #"{"type":"message_start","message":{"id":"msg_test"}}"#),
+            ("content_block_delta", #"{"type":"content_block_delta","index":0,"delta":{"text":"café"}}"#),
+            ("message_stop", #"{"type":"message_stop"}"#),
+        ]
+        var checks = 0
+        for separator in ["\n", "\r\n", "\r"] {
+            var lines: [String] = [": heartbeat"]
+            for (name, json) in expected {
+                lines.append("event: \(name)")
+                lines.append("data: \(json)")
+                lines.append("")
+            }
+            lines.append("")
+            let wire = lines.joined(separator: separator)
+            var decoder = ProviderSSEDecoder()
+            var received: [ProviderSSEEvent] = []
+            for byte in wire.utf8 {
+                if let event = try decoder.receive(byte) {
+                    received.append(event)
+                }
+            }
+            if let event = try decoder.finish() {
+                received.append(event)
+            }
+            try Expect.equal(received.count, expected.count, "Exactly three framed SSE events")
+            for (index, event) in received.enumerated() {
+                try Expect.equal(event.name, expected[index].name, "SSE event name")
+                let json = try ProviderJSON.object(Data(event.data.utf8))
+                try Expect.equal(json["type"] as? String, expected[index].name, "Independent JSON payload")
+                checks += 1
+            }
+        }
+
+        // Multiline fields must be joined with a single newline, not decoded separately.
+        var multiline = ProviderSSEDecoder()
+        let multilineWire = "event: test\ndata: {\ndata: \"ok\": true\ndata: }\n\n"
+        var multilineEvents: [ProviderSSEEvent] = []
+        for byte in multilineWire.utf8 {
+            if let event = try multiline.receive(byte) {
+                multilineEvents.append(event)
+            }
+        }
+        try Expect.equal(multilineEvents.count, 1, "Multiline payload emitted once")
+        try Expect.equal(
+            multilineEvents[0].data, "{\n\"ok\": true\n}",
+            "Multiline data field framing")
+        _ = try ProviderJSON.object(Data(multilineEvents[0].data.utf8))
+
+        // EOF without a final blank line keeps the previous behavior.
+        var trailing = ProviderSSEDecoder()
+        for byte in "event: final\ndata: {\"type\":\"final\"}".utf8 {
+            _ = try trailing.receive(byte)
+        }
+        let last = try trailing.finish()
+        try Expect.equal(last?.name, "final", "EOF dispatch")
+        try Expect.equal(last?.data, "{\"type\":\"final\"}", "EOF content")
+
+        // A data field with an empty value is still a valid event.
+        var empty = ProviderSSEDecoder()
+        var emptyEvent: ProviderSSEEvent?
+        for byte in "data:\n\n".utf8 {
+            if let event = try empty.receive(byte) {
+                emptyEvent = event
+            }
+        }
+        try Expect.equal(emptyEvent?.name, "message", "Default SSE name")
+        try Expect.equal(emptyEvent?.data, "", "Empty data payload")
+        return [.field("sse_json_events", String(checks))]
+    }
 }

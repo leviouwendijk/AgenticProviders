@@ -120,27 +120,16 @@ public struct ProviderHTTP: Sendable {
                     let request = try request(path: path, body: body, timeout: timeout)
                     let (bytes, response) = try await URLSession.shared.bytes(for: request)
                     try validate(response)
-                    var event = "message"
-                    var lines: [String] = []
-                    for try await line in bytes.lines {
+
+                    var decoder = ProviderSSEDecoder()
+                    for try await byte in bytes {
                         try Task.checkCancellation()
-                        if line.isEmpty {
-                            if !lines.isEmpty {
-                                continuation.yield(
-                                    .init(name: event, data: lines.joined(separator: "\n")))
-                            }
-                            event = "message"
-                            lines.removeAll(keepingCapacity: true)
-                        } else if line.hasPrefix("event:") {
-                            event = String(line.dropFirst(6)).trimmingCharacters(in: .whitespaces)
-                        } else if line.hasPrefix("data:") {
-                            var data = String(line.dropFirst(5))
-                            if data.first == " " { data.removeFirst() }
-                            lines.append(data)
+                        if let event = try decoder.receive(byte) {
+                            continuation.yield(event)
                         }
                     }
-                    if !lines.isEmpty {
-                        continuation.yield(.init(name: event, data: lines.joined(separator: "\n")))
+                    if let event = try decoder.finish() {
+                        continuation.yield(event)
                     }
                     continuation.finish()
                 } catch {

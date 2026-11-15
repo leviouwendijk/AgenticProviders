@@ -4,6 +4,9 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
     static let title = "AgenticProviders flow tests"
 
     static let flows: [TestFlow] = [
+        TestFlow(ID.native_provider_sse_framing, tags: ["openai", "anthropic", "offline", "stream", "sse"]) {
+            try AgenticProvidersFlowTesting.runNativeProviderSSEFraming()
+        },
         TestFlow(ID.native_provider_wire_contracts, tags: ["openai", "anthropic", "offline", "wire"]) {
             try AgenticProvidersFlowTesting.runNativeProviderWireContracts()
         },
@@ -162,6 +165,7 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
 
 extension AgenticProvidersFlowSuite {
     enum ID {
+        static let native_provider_sse_framing = "native-provider-sse-framing"
         static let native_provider_wire_contracts = "native-provider-wire-contracts"
         static let native_provider_continuation = "native-provider-continuation"
         static let anthropic_native_stream = "anthropic-native-stream"
