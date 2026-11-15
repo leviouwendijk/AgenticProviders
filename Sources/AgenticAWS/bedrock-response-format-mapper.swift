@@ -17,8 +17,10 @@ enum BedrockResponseFormatMapper {
             let encoder = JSONEncoder()
             encoder.outputFormatting = [.sortedKeys]
 
+            // `BedrockRequestMapper.prepared` has turned an inexpressible
+            // schema into prompted JSON, so this lowering holds.
             let data = try encoder.encode(
-                schema.jsonvalue
+                BedrockStructuredSchema(schema).schema.jsonvalue
             )
 
             return .jsonschema(

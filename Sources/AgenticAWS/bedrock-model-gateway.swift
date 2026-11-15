@@ -97,6 +97,7 @@ public struct BedrockModelResponseProvider: AgentModelResponseProviding {
         context _: AgentModelInvocationContext
     ) async throws -> AgentResponse {
         let model = route.profile.model
+        let (request, lowering) = try BedrockRequestMapper.prepared(request)
         let bedrock = try BedrockRequestMapper.map(
             request
         )
@@ -110,7 +111,7 @@ public struct BedrockModelResponseProvider: AgentModelResponseProviding {
         let metadata = BedrockMetadata.base(
             configuration.metadata,
             model: model
-        )
+        ).merging(lowering) { _, lowered in lowered }
         let response = try await configuration.runtime.respond(
             bedrock,
             modelIdentifier: model,
@@ -132,6 +133,7 @@ public struct BedrockModelResponseProvider: AgentModelResponseProviding {
             let task = Task {
                 do {
                     let model = route.profile.model
+                    let (request, lowering) = try BedrockRequestMapper.prepared(request)
                     let bedrock = try BedrockRequestMapper.map(
                         request
                     )
@@ -145,7 +147,7 @@ public struct BedrockModelResponseProvider: AgentModelResponseProviding {
                     let metadata = BedrockMetadata.base(
                         configuration.metadata,
                         model: model
-                    )
+                    ).merging(lowering) { _, lowered in lowered }
                     var stream = BedrockStreamAccumulator(
                         metadata: metadata
                     )

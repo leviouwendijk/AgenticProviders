@@ -155,6 +155,12 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
             try await AgenticProvidersFlowTesting.runBedrockStructuredOutputLowering()
         },
         TestFlow(
+            ID.bedrock_open_schema_lowering,
+            tags: ["aws", "bedrock", "structured-output", "offline"]
+        ) {
+            try await AgenticProvidersFlowTesting.runBedrockOpenSchemaLowering()
+        },
+        TestFlow(
             ID.bedrock_live_nested_profile_api,
             tags: ["aws", "bedrock", "model-discovery", "model-routing", "live"]
         ) {
@@ -192,6 +198,7 @@ extension AgenticProvidersFlowSuite {
         static let bedrock_generic_snapshot_provider_catalog = "bedrock-generic-snapshot-provider-catalog"
         static let bedrock_discovery_tool_registration = "bedrock-discovery-tool-registration"
         static let bedrock_structured_output_lowering = "bedrock-structured-output-lowering"
+        static let bedrock_open_schema_lowering = "bedrock-open-schema-lowering"
         static let bedrock_live_nested_profile_api = "bedrock-live-nested-profile-api"
     }
 }

@@ -7,7 +7,7 @@
       "location" : "https://github.com/leviouwendijk/Agentic.git",
       "state" : {
         "branch" : "master",
-        "revision" : "8d33865fa3b3169c980a60723c3fdb9505f237d2"
+        "revision" : "841f04a9b4063a92d7550d96ea7228b38d5561fd"
       }
     },
     {
@@ -286,7 +286,7 @@
       "location" : "https://github.com/leviouwendijk/Schema.git",
       "state" : {
         "branch" : "master",
-        "revision" : "a3b2d62e52cb7e061d5a5cdadb63f4d31684dd4d"
+        "revision" : "af9a4e2d0b5da1239f53b405a3e04e636dd489c4"
       }
     },
     {

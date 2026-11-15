@@ -412,6 +412,64 @@ extension AgenticProvidersFlowTesting {
             ),
         ]
     }
+
+    /// Generated records are open by default; Bedrock needs every object
+    /// closed. Records close (nested ones too); a dictionary cannot, so the
+    /// request asks for prompted JSON and says why.
+    static func runBedrockOpenSchemaLowering() async throws -> [TestDiagnostic] {
+        let finding = JSONSchema.object(properties: [
+            .init(name: "site", schema: .string(), required: true),
+        ])
+        let report = JSONSchema.object(properties: [
+            .init(name: "summary", schema: .string(), required: true),
+            .init(name: "findings", schema: .array(items: finding), required: true),
+        ])
+        let closed = JSONSchema.object(
+            properties: [
+                .init(name: "summary", schema: .string(), required: true),
+                .init(
+                    name: "findings",
+                    schema: .array(items: .object(
+                        properties: [.init(name: "site", schema: .string(), required: true)],
+                        additionalProperties: .disallowed
+                    )),
+                    required: true
+                ),
+            ],
+            additionalProperties: .disallowed
+        )
+        func send(_ schema: JSONSchema) async throws -> (BedrockFlowCall, AgentResponse) {
+            let runtime = BedrockFlowRuntime(responses: [BedrockFlowFixture.response(text: #"{"summary":"ok"}"#)])
+            let response = try await BedrockModelGateway(runtime: runtime).respond(
+                request: AgentRequest(
+                    messages: [.init(role: .user, text: "Report.")],
+                    responseFormat: .jsonschema(schema)
+                ),
+                route: bedrockFlowRoute(model: "structured-model")
+            )
+            return (try await runtime.onlyCall(), response)
+        }
+
+        let (recordCall, _) = try await send(report)
+        let lowered = try JSONDecoder().decode(
+            JSONValue.self,
+            from: Data(try Expect.notNil(recordCall.request.outputConfig?.textFormat, "native format")
+                .structure.jsonSchema.schema.utf8)
+        )
+        try Expect.equal(lowered, closed.jsonvalue, "open records, nested ones too, are closed")
+
+        let dictionary = JSONSchema.object(properties: [
+            .init(name: "groups", schema: [String: [String]].jsonschema, required: true),
+        ])
+        let (dictionaryCall, response) = try await send(dictionary)
+        try Expect.true(dictionaryCall.request.outputConfig == nil, "a dictionary is not sent as a native schema")
+        try Expect.equal(response.metadata["output_representation"], "prompted_json", "it is asked for as prompted JSON")
+        try Expect.true(
+            response.metadata["output_lowering"]?.contains("$.groups") == true,
+            "the reason names the path: \(response.metadata["output_lowering"] ?? "")"
+        )
+        return []
+    }
 }
 
 private func bedrockFlowRoute(
