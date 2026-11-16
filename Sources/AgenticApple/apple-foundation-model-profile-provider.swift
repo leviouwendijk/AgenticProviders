@@ -34,6 +34,8 @@ public struct AppleFoundationModelProfileProvider: AgentModelProfileProvider {
                     .streaming,
                     .structured_output
                 ],
+                // Small local models: short, simple, private work.
+                tier: .light,
                 cost: .free,
                 latency: .low,
                 privacy: .local_private,

@@ -23,11 +23,6 @@ public struct AnthropicModelGateway: AgentModelGateway {
 }
 
 public struct AnthropicModelProvider: AgentModelProvider {
-    /// Claude models are general-purpose: every role but on-device private work.
-    static let purposes: Set<AgentModelRoutePurpose> = Set(
-        AgentModelRoutePurpose.allCases
-    ).subtracting([.local_private])
-
     public let descriptor = AgentModelProviderDescriptor(
         source: "anthropic", displayName: "Anthropic")
     public let api_key_symbol: String
@@ -77,59 +72,51 @@ public struct AnthropicModelProvider: AgentModelProvider {
                     source: "anthropic",
                     profiles: [
                         .init(
+                            known: KnownModel.claude.fable_5_2,
                             identifier: "anthropic:fable_5_2", gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-fable-5-2", modelID: KnownModel.claude.fable_5_2,
-                            title: "Claude Fable 5.2",
-                            purposes: AnthropicModelProvider.purposes,
+                            model: "claude-fable-5-2", title: "Claude Fable 5.2",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.claude.opus_5_5,
                             identifier: "anthropic:opus_5_5", gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-opus-5-5", modelID: KnownModel.claude.opus_5_5,
-                            title: "Claude Opus 5.5",
-                            purposes: AnthropicModelProvider.purposes,
+                            model: "claude-opus-5-5", title: "Claude Opus 5.5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
-                            identifier: "anthropic:sonnet_5_5",
-                            gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-sonnet-5-5", modelID: KnownModel.claude.sonnet_5_5,
-                            title: "Claude Sonnet 5.5",
-                            purposes: AnthropicModelProvider.purposes,
+                            known: KnownModel.claude.sonnet_5_5,
+                            identifier: "anthropic:sonnet_5_5", gatewayIdentifier: gatewayIdentifier,
+                            model: "claude-sonnet-5-5", title: "Claude Sonnet 5.5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.claude.haiku_5_5,
                             identifier: "anthropic:haiku_5_5", gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-haiku-5-5", modelID: KnownModel.claude.haiku_5_5,
-                            title: "Claude Haiku 5.5",
-                            purposes: AnthropicModelProvider.purposes,
+                            model: "claude-haiku-5-5", title: "Claude Haiku 5.5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.claude.opus_5,
                             identifier: "anthropic:opus_5", gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-opus-5", modelID: KnownModel.claude.opus_5,
-                            title: "Claude Opus 5",
-                            purposes: AnthropicModelProvider.purposes,
+                            model: "claude-opus-5", title: "Claude Opus 5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.claude.sonnet_5,
                             identifier: "anthropic:sonnet_5", gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-sonnet-5", modelID: KnownModel.claude.sonnet_5,
-                            title: "Claude Sonnet 5",
-                            purposes: AnthropicModelProvider.purposes,
+                            model: "claude-sonnet-5", title: "Claude Sonnet 5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.claude.opus_4_8,
                             identifier: "anthropic:opus_4_8", gatewayIdentifier: gatewayIdentifier,
-                            model: "claude-opus-4-8", modelID: KnownModel.claude.opus_4_8,
-                            title: "Claude Opus 4.8",
-                            purposes: AnthropicModelProvider.purposes,
+                            model: "claude-opus-4-8", title: "Claude Opus 4.8",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),

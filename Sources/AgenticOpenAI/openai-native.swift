@@ -69,30 +69,30 @@ public struct OpenAIModelProvider: AgentModelProvider {
                     source: "openai",
                     profiles: [
                         .init(
+                            known: KnownModel.gpt.astra_6,
                             identifier: "openai:astra_6", gatewayIdentifier: gatewayIdentifier,
-                            model: "gpt-6-astra", modelID: KnownModel.gpt.astra_6,
-                            title: "GPT-6 Astra",
+                            model: "gpt-6-astra", title: "GPT-6 Astra",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.gpt.sol_6_1,
                             identifier: "openai:sol_6_1", gatewayIdentifier: gatewayIdentifier,
-                            model: "gpt-6.1-sol", modelID: KnownModel.gpt.sol_6_1,
-                            title: "GPT-6.1 Sol",
+                            model: "gpt-6.1-sol", title: "GPT-6.1 Sol",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.gpt.terra_6_1,
                             identifier: "openai:terra_6_1", gatewayIdentifier: gatewayIdentifier,
-                            model: "gpt-6.1-terra", modelID: KnownModel.gpt.terra_6_1,
-                            title: "GPT-6.1 Terra",
+                            model: "gpt-6.1-terra", title: "GPT-6.1 Terra",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
                         .init(
+                            known: KnownModel.gpt.luna_6,
                             identifier: "openai:luna_6", gatewayIdentifier: gatewayIdentifier,
-                            model: "gpt-6-luna", modelID: KnownModel.gpt.luna_6,
-                            title: "GPT-6 Luna",
+                            model: "gpt-6-luna", title: "GPT-6 Luna",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),

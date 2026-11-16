@@ -17,17 +17,7 @@ public struct BedrockModelProfileProvider: AgentModelProfileProvider {
     public init(
         gatewayIdentifier: AgentModelGatewayIdentifier = .aws_bedrock,
         models: [String],
-        defaultPurposes: Set<AgentModelRoutePurpose> = [
-            .executor,
-            .planner,
-            .researcher,
-            .advisor,
-            .reviewer,
-            .summarizer,
-            .classifier,
-            .extractor,
-            .coder
-        ],
+        defaultPurposes: Set<AgentModelRoutePurpose> = AgentModelRoutePurpose.general,
         defaultCapabilities: Set<AgentModelCapability> = [
             .text,
             .tool_use,
@@ -35,8 +25,8 @@ public struct BedrockModelProfileProvider: AgentModelProfileProvider {
             .structured_output,
             .reasoning
         ],
-        cost: AgentModelCostClass = .balanced,
-        latency: AgentModelLatencyClass = .medium,
+        cost: AgentModelCostClass? = nil,
+        latency: AgentModelLatencyClass? = nil,
         privacy: AgentModelPrivacyClass = .private_cloud
     ) {
         self.gatewayIdentifier = gatewayIdentifier
@@ -56,17 +46,7 @@ public struct BedrockModelProfileProvider: AgentModelProfileProvider {
     public init(
         gatewayIdentifier: AgentModelGatewayIdentifier = .aws_bedrock,
         handles: [BedrockModelHandle],
-        defaultPurposes: Set<AgentModelRoutePurpose> = [
-            .executor,
-            .planner,
-            .researcher,
-            .advisor,
-            .reviewer,
-            .summarizer,
-            .classifier,
-            .extractor,
-            .coder
-        ],
+        defaultPurposes: Set<AgentModelRoutePurpose> = AgentModelRoutePurpose.general,
         defaultCapabilities: Set<AgentModelCapability> = [
             .text,
             .tool_use,
@@ -74,8 +54,8 @@ public struct BedrockModelProfileProvider: AgentModelProfileProvider {
             .structured_output,
             .reasoning
         ],
-        cost: AgentModelCostClass = .balanced,
-        latency: AgentModelLatencyClass = .medium,
+        cost: AgentModelCostClass? = nil,
+        latency: AgentModelLatencyClass? = nil,
         privacy: AgentModelPrivacyClass = .private_cloud
     ) {
         self.gatewayIdentifier = gatewayIdentifier
@@ -104,20 +84,20 @@ public enum BedrockModelProfiles {
         modelID: AgentModelID? = nil,
         title: String? = nil,
         gatewayIdentifier: AgentModelGatewayIdentifier = .aws_bedrock,
-        purposes: Set<AgentModelRoutePurpose> = [
-            .executor
-        ],
+        purposes: Set<AgentModelRoutePurpose> = AgentModelRoutePurpose.general,
         capabilities: Set<AgentModelCapability> = [
             .text,
             .tool_use,
             .streaming
         ],
-        cost: AgentModelCostClass = .balanced,
-        latency: AgentModelLatencyClass = .medium,
+        cost: AgentModelCostClass? = nil,
+        latency: AgentModelLatencyClass? = nil,
         privacy: AgentModelPrivacyClass = .private_cloud,
-        limits: AgentModelLimits = .unknown,
+        limits: AgentModelLimits? = nil,
         metadata: [String: String] = [:]
     ) -> AgentModelProfile {
+        // A known model brings its facts; what is given here overrides them.
+        let facts = modelID.flatMap(KnownModel.facts) ?? .init()
         var metadata = metadata
         metadata["provider"] = metadata["provider"] ?? "aws"
         metadata["gateway"] = metadata["gateway"] ?? "bedrock_converse"
@@ -138,10 +118,11 @@ public enum BedrockModelProfiles {
             title: title ?? model,
             purposes: purposes,
             capabilities: capabilities,
-            cost: cost,
-            latency: latency,
+            tier: facts.tier,
+            cost: cost ?? facts.cost ?? .balanced,
+            latency: latency ?? facts.latency ?? .medium,
             privacy: privacy,
-            limits: limits,
+            limits: limits ?? facts.limits,
             metadata: metadata
         )
     }
@@ -149,18 +130,16 @@ public enum BedrockModelProfiles {
     public static func profile(
         handle: BedrockModelHandle,
         gatewayIdentifier: AgentModelGatewayIdentifier = .aws_bedrock,
-        purposes: Set<AgentModelRoutePurpose> = [
-            .executor
-        ],
+        purposes: Set<AgentModelRoutePurpose> = AgentModelRoutePurpose.general,
         capabilities: Set<AgentModelCapability> = [
             .text,
             .tool_use,
             .streaming
         ],
-        cost: AgentModelCostClass = .balanced,
-        latency: AgentModelLatencyClass = .medium,
+        cost: AgentModelCostClass? = nil,
+        latency: AgentModelLatencyClass? = nil,
         privacy: AgentModelPrivacyClass = .private_cloud,
-        limits: AgentModelLimits = .unknown,
+        limits: AgentModelLimits? = nil,
         metadata: [String: String] = [:]
     ) -> AgentModelProfile {
         profile(

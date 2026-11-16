@@ -87,15 +87,7 @@ public struct BedrockModelDiscovery: Sendable {
     public func profiles(
         options: BedrockModelDiscoveryOptions = .default,
         gatewayIdentifier: AgentModelGatewayIdentifier = .aws_bedrock,
-        purposes: Set<AgentModelRoutePurpose> = [
-            .executor,
-            .advisor,
-            .reviewer,
-            .summarizer,
-            .classifier,
-            .extractor,
-            .coder
-        ],
+        purposes: Set<AgentModelRoutePurpose> = AgentModelRoutePurpose.general,
         capabilities: Set<AgentModelCapability> = [
             .text,
             .tool_use,
@@ -103,8 +95,8 @@ public struct BedrockModelDiscovery: Sendable {
             .structured_output,
             .reasoning
         ],
-        cost: AgentModelCostClass = .balanced,
-        latency: AgentModelLatencyClass = .medium,
+        cost: AgentModelCostClass? = nil,
+        latency: AgentModelLatencyClass? = nil,
         privacy: AgentModelPrivacyClass = .private_cloud
     ) async throws -> [AgentModelProfile] {
         try await handles(

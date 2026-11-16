@@ -43,6 +43,8 @@ public struct OllamaModelProfileProvider: AgentModelProfileProvider {
                     .tool_use,
                     .streaming,
                 ],
+                // Small local models: short, simple, private work.
+                tier: .light,
                 cost: .free,
                 latency: .medium,
                 privacy: .local_private,

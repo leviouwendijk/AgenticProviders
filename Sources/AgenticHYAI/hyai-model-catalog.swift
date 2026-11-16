@@ -183,31 +183,18 @@ public enum HYAIModelCatalog {
     ) -> [AgentModelProfile] {
         listings.map { listing in
             .init(
+                known: listing.modelID,
                 identifier: listing.identifier,
                 gatewayIdentifier: gatewayIdentifier,
                 model: listing.model,
-                modelID: listing.modelID,
                 title: listing.title,
-                purposes: [
-                    .executor,
-                    .planner,
-                    .researcher,
-                    .advisor,
-                    .reviewer,
-                    .summarizer,
-                    .classifier,
-                    .extractor,
-                    .coder,
-                ],
                 capabilities: [
                     .text,
                     .tool_use,
                     .streaming,
                 ],
                 cost: listing.cost,
-                latency: .medium,
                 privacy: .private_cloud,
-                limits: .unknown,
                 metadata: [
                     "provider": "hostyourai",
                     "gateway": "hyai_chat_completions",

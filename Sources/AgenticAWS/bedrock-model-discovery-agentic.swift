@@ -47,15 +47,7 @@ public extension BedrockModelDiscovery {
     func profiles(
         from handles: [BedrockModelHandle],
         gatewayIdentifier: AgentModelGatewayIdentifier = .aws_bedrock,
-        purposes: Set<AgentModelRoutePurpose> = [
-            .executor,
-            .advisor,
-            .reviewer,
-            .summarizer,
-            .classifier,
-            .extractor,
-            .coder
-        ],
+        purposes: Set<AgentModelRoutePurpose> = AgentModelRoutePurpose.general,
         capabilities: Set<AgentModelCapability> = [
             .text,
             .tool_use,
@@ -63,8 +55,8 @@ public extension BedrockModelDiscovery {
             .structured_output,
             .reasoning
         ],
-        cost: AgentModelCostClass = .balanced,
-        latency: AgentModelLatencyClass = .medium,
+        cost: AgentModelCostClass? = nil,
+        latency: AgentModelLatencyClass? = nil,
         privacy: AgentModelPrivacyClass = .private_cloud
     ) -> [AgentModelProfile] {
         handles.map { handle in

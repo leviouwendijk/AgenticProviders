@@ -1,4 +1,5 @@
 import Agentic
+import AgenticModels
 import AgenticProviderHTTP
 import Foundation
 import TestFlows
@@ -12,12 +13,18 @@ extension AgenticProvidersFlowTesting {
         // coder, reviewer…), so an explicit Claude selection is never
         // rejected for its purpose and silently rerouted.
         let claude = try AnthropicModelProvider().profileProviders.flatMap { try $0.profiles() }
-        for purpose in AgentModelRoutePurpose.allCases where purpose != .local_private {
+        let gpt = try OpenAIModelProvider().profileProviders.flatMap { try $0.profiles() }
+        for purpose in AgentModelRoutePurpose.general {
             try Expect.true(
-                claude.allSatisfy { $0.purposes.contains(purpose) },
-                "every Claude profile serves \(purpose.rawValue)"
+                (claude + gpt).allSatisfy { $0.purposes.contains(purpose) },
+                "every Claude and GPT profile serves \(purpose.rawValue)"
             )
         }
+        let opus = claude.first { $0.modelID == KnownModel.claude.opus_5_5 }
+        try Expect.true(
+            opus?.tier == .frontier && opus?.limits.inputTokens == 1_000_000,
+            "a Claude profile carries its model's tier and documented limits"
+        )
         let call = FunctionCall(id: "count.call", name: "read_file", input: .object([:]))
         let openai: [[String: Any]] = [
             ["type": "reasoning", "id": "rs_fixture", "summary": [],
