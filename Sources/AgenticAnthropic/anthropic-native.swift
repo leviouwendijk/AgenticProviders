@@ -23,6 +23,11 @@ public struct AnthropicModelGateway: AgentModelGateway {
 }
 
 public struct AnthropicModelProvider: AgentModelProvider {
+    /// Claude models are general-purpose: every role but on-device private work.
+    static let purposes: Set<AgentModelRoutePurpose> = Set(
+        AgentModelRoutePurpose.allCases
+    ).subtracting([.local_private])
+
     public let descriptor = AgentModelProviderDescriptor(
         source: "anthropic", displayName: "Anthropic")
     public let api_key_symbol: String
@@ -75,6 +80,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             identifier: "anthropic:fable_5_2", gatewayIdentifier: gatewayIdentifier,
                             model: "claude-fable-5-2", modelID: KnownModel.claude.fable_5_2,
                             title: "Claude Fable 5.2",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -82,6 +88,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             identifier: "anthropic:opus_5_5", gatewayIdentifier: gatewayIdentifier,
                             model: "claude-opus-5-5", modelID: KnownModel.claude.opus_5_5,
                             title: "Claude Opus 5.5",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -90,6 +97,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             gatewayIdentifier: gatewayIdentifier,
                             model: "claude-sonnet-5-5", modelID: KnownModel.claude.sonnet_5_5,
                             title: "Claude Sonnet 5.5",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -97,6 +105,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             identifier: "anthropic:haiku_5_5", gatewayIdentifier: gatewayIdentifier,
                             model: "claude-haiku-5-5", modelID: KnownModel.claude.haiku_5_5,
                             title: "Claude Haiku 5.5",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -104,6 +113,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             identifier: "anthropic:opus_5", gatewayIdentifier: gatewayIdentifier,
                             model: "claude-opus-5", modelID: KnownModel.claude.opus_5,
                             title: "Claude Opus 5",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -111,6 +121,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             identifier: "anthropic:sonnet_5", gatewayIdentifier: gatewayIdentifier,
                             model: "claude-sonnet-5", modelID: KnownModel.claude.sonnet_5,
                             title: "Claude Sonnet 5",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -118,6 +129,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             identifier: "anthropic:opus_4_8", gatewayIdentifier: gatewayIdentifier,
                             model: "claude-opus-4-8", modelID: KnownModel.claude.opus_4_8,
                             title: "Claude Opus 4.8",
+                            purposes: AnthropicModelProvider.purposes,
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
                             ]),
@@ -128,6 +140,16 @@ public struct AnthropicModelProvider: AgentModelProvider {
 
 struct AnthropicResponseProvider: AgentModelResponseProviding {
     let client: ProviderHTTP
+
+    func countInputTokens(
+        request: AgentRequest, route: AgentModelRoute, context _: AgentModelInvocationContext
+    ) async throws -> Int? {
+        let body = try AnthropicMapper.countRequest(request, model: route.profile.model)
+        let data = try await client.post(
+            path: "/v1/messages/count_tokens", body: body,
+            timeout: request.invocationoptions?.timeoutseconds)
+        return try ProviderJSON.inputTokenCount(data)
+    }
 
     func buffered(
         request: AgentRequest, route: AgentModelRoute, context _: AgentModelInvocationContext
@@ -248,6 +270,16 @@ enum AnthropicMapper {
             ]
         }
         return try ProviderJSON.encode(payload)
+    }
+
+    /// Preserve the exact native messages, signed thinking and output schema.
+    static func countRequest(_ request: AgentRequest, model: String) throws -> Data {
+        let payload = try ProviderJSON.object(Self.request(request, model: model, stream: false))
+        let fields: Set<String> = [
+            "model", "messages", "system", "tools", "thinking", "tool_choice",
+            "output_config", "cache_control",
+        ]
+        return try ProviderJSON.encode(payload.filter { fields.contains($0.key) })
     }
 
     static func call(_ block: [String: Any]) throws -> FunctionCall? {

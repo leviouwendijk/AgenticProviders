@@ -20,6 +20,17 @@ public enum ProviderHTTPError: Error, Sendable, LocalizedError {
 }
 
 public enum ProviderJSON {
+    /// Both native counting APIs return input_tokens. Missing, malformed and
+    /// negative counts are errors, never a successful zero-token measurement.
+    public static func inputTokenCount(_ data: Data) throws -> Int {
+        struct Count: Decodable {
+            let input_tokens: Int
+        }
+        let count = try JSONDecoder().decode(Count.self, from: data).input_tokens
+        guard count >= 0 else { throw ProviderHTTPError.invalidJSON }
+        return count
+    }
+
     public static func object(_ data: Data) throws -> [String: Any] {
         guard let object = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
             throw ProviderHTTPError.invalidJSON

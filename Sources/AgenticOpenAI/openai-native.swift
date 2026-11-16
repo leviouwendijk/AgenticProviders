@@ -104,6 +104,16 @@ public struct OpenAIModelProvider: AgentModelProvider {
 struct OpenAIResponseProvider: AgentModelResponseProviding {
     let client: ProviderHTTP
 
+    func countInputTokens(
+        request: AgentRequest, route: AgentModelRoute, context _: AgentModelInvocationContext
+    ) async throws -> Int? {
+        let body = try OpenAIMapper.countRequest(request, model: route.profile.model)
+        let data = try await client.post(
+            path: "/responses/input_tokens", body: body,
+            timeout: request.invocationoptions?.timeoutseconds)
+        return try ProviderJSON.inputTokenCount(data)
+    }
+
     func buffered(
         request: AgentRequest, route: AgentModelRoute, context _: AgentModelInvocationContext
     ) async throws -> AgentResponse {
@@ -237,6 +247,17 @@ enum OpenAIMapper {
             ]
         }
         return try ProviderJSON.encode(payload)
+    }
+
+    /// Use the generation mapper so native replay and schemas occur once.
+    /// The count endpoint does not accept response-generation parameters.
+    static func countRequest(_ request: AgentRequest, model: String) throws -> Data {
+        let payload = try ProviderJSON.object(Self.request(request, model: model, stream: false))
+        let fields: Set<String> = [
+            "model", "input", "instructions", "tools", "text", "reasoning",
+            "tool_choice", "parallel_tool_calls", "conversation", "previous_response_id",
+        ]
+        return try ProviderJSON.encode(payload.filter { fields.contains($0.key) })
     }
 
     static func call(_ item: [String: Any]) throws -> FunctionCall? {
