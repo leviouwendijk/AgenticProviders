@@ -246,7 +246,16 @@ enum AnthropicMapper {
             "model": model, "messages": messages, "max_tokens": config.maxOutputTokens ?? 4096,
             "stream": stream,
         ]
-        if !system.isEmpty { payload["system"] = system.joined(separator: "\n\n") }
+        // Prompt caching: a breakpoint on the system block caches tools and
+        // system together; the top-level marker moves with the growing
+        // conversation, so each request reads the previous one's prefix.
+        if !system.isEmpty {
+            payload["system"] = [[
+                "type": "text", "text": system.joined(separator: "\n\n"),
+                "cache_control": ["type": "ephemeral"],
+            ]]
+        }
+        payload["cache_control"] = ["type": "ephemeral"]
         if let temperature = config.temperature { payload["temperature"] = temperature }
         if let topP = config.topP { payload["top_p"] = topP }
         if !config.stopSequences.isEmpty { payload["stop_sequences"] = config.stopSequences }
@@ -277,7 +286,7 @@ enum AnthropicMapper {
         let payload = try ProviderJSON.object(Self.request(request, model: model, stream: false))
         let fields: Set<String> = [
             "model", "messages", "system", "tools", "thinking", "tool_choice",
-            "output_config", "cache_control",
+            "output_config",
         ]
         return try ProviderJSON.encode(payload.filter { fields.contains($0.key) })
     }

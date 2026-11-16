@@ -73,6 +73,17 @@ extension AgenticProvidersFlowTesting {
         for field in ["model", "messages", "system", "tools", "output_config"] {
             try match(field, count: anthropicCount, generation: anthropicGeneration)
         }
+        // Claude routes cache: a breakpoint on the system block (tools and
+        // system) plus the top-level marker that follows the conversation.
+        try Expect.true(
+            (anthropicGeneration["cache_control"] as? [String: Any])?["type"] as? String == "ephemeral",
+            "Generation requests cache the growing conversation"
+        )
+        try Expect.true(
+            ((anthropicGeneration["system"] as? [[String: Any]])?.last?["cache_control"] as? [String: Any])?["type"] as? String == "ephemeral",
+            "The system block is a cache breakpoint"
+        )
+        try Expect.true(anthropicCount["cache_control"] == nil, "Counting does not depend on caching")
         try Expect.true(openaiCount["stream"] == nil && openaiCount["max_output_tokens"] == nil,
             "OpenAI count requests exclude generation-only fields")
         try Expect.true(anthropicCount["stream"] == nil && anthropicCount["max_tokens"] == nil,
