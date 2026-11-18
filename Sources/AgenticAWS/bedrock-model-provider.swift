@@ -1,4 +1,6 @@
 import Agentic
+import AWSConnector
+import Foundation
 
 public struct BedrockModelProvider:
     AgentModelProvider
@@ -30,14 +32,49 @@ public struct BedrockModelProvider:
         self.diagnostics = diagnostics
         self.storedGateways = [
             .init(
-                identifier: gatewayIdentifier
-            ) {
-                try BedrockModelGateway.resolve(
-                    identifier: gatewayIdentifier,
-                    metadata: metadata,
-                    diagnostics: diagnostics
-                )
-            },
+                identifier: gatewayIdentifier,
+                resolve: {
+                    // Missing or unusable AWS configuration leaves Bedrock
+                    // unavailable; it does not stop the runtime.
+                    do {
+                        return .available(
+                            try BedrockModelGateway.resolve(
+                                identifier: gatewayIdentifier,
+                                metadata: metadata,
+                                diagnostics: diagnostics
+                            )
+                        )
+                    } catch let error as AWSRegionError {
+                        switch error {
+                        case .missingConfigFile:
+                            return .unavailable(
+                                .bedrock(.missing_configuration, error)
+                            )
+
+                        case .unreadableConfigFile,
+                             .missingConfigProfile,
+                             .missingRegion:
+                            return .unavailable(
+                                .bedrock(.invalid_configuration, error)
+                            )
+                        }
+                    } catch let error as AWSCredentialsError {
+                        switch error {
+                        case .missingSharedCredentialsFile:
+                            return .unavailable(
+                                .bedrock(.missing_configuration, error)
+                            )
+
+                        case .unreadableSharedCredentialsFile,
+                             .missingSharedCredentialsProfile,
+                             .missingProfileValue:
+                            return .unavailable(
+                                .bedrock(.invalid_configuration, error)
+                            )
+                        }
+                    }
+                }
+            ),
         ]
     }
 
@@ -86,5 +123,21 @@ public struct BedrockModelProvider:
                 profiles: profiles
             ),
         ]
+    }
+}
+
+private extension AgentModelGatewayUnavailability {
+    static func bedrock(
+        _ kind: Kind,
+        _ error: any LocalizedError
+    ) -> Self {
+        .init(
+            kind: kind,
+            message: error.errorDescription ?? "AWS configuration for Bedrock is unavailable.",
+            metadata: [
+                "provider": "aws",
+                "configuration": "AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY or ~/.aws",
+            ]
+        )
     }
 }
