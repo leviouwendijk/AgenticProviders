@@ -1,5 +1,5 @@
 import Agentic
-@testable import AgenticHYAI
+import AgenticHYAI
 import Foundation
 import Primitives
 import TestFlows

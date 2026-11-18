@@ -174,8 +174,8 @@ struct AnthropicResponseProvider: AgentModelResponseProviding {
     }
 }
 
-enum AnthropicMapper {
-    static func request(_ request: AgentRequest, model: String, stream: Bool) throws -> Data {
+package enum AnthropicMapper {
+    package static func request(_ request: AgentRequest, model: String, stream: Bool) throws -> Data {
         var system: [String] = []
         var messages: [[String: Any]] = []
         for message in request.messages {
@@ -269,7 +269,7 @@ enum AnthropicMapper {
     }
 
     /// Preserve the exact native messages, signed thinking and output schema.
-    static func countRequest(_ request: AgentRequest, model: String) throws -> Data {
+    package static func countRequest(_ request: AgentRequest, model: String) throws -> Data {
         let payload = try ProviderJSON.object(Self.request(request, model: model, stream: false))
         let fields: Set<String> = [
             "model", "messages", "system", "tools", "thinking", "tool_choice",
@@ -278,7 +278,7 @@ enum AnthropicMapper {
         return try ProviderJSON.encode(payload.filter { fields.contains($0.key) })
     }
 
-    static func call(_ block: [String: Any]) throws -> FunctionCall? {
+    package static func call(_ block: [String: Any]) throws -> FunctionCall? {
         guard block["type"] as? String == "tool_use" else { return nil }
         guard let id = block["id"] as? String,
             let name = block["name"] as? String,
@@ -287,7 +287,7 @@ enum AnthropicMapper {
         return .init(id: id, name: name, input: try ProviderJSON.value(input))
     }
 
-    static func response(_ object: [String: Any]) throws -> AgentResponse {
+    package static func response(_ object: [String: Any]) throws -> AgentResponse {
         guard let content = object["content"] as? [[String: Any]] else {
             throw ProviderHTTPError.invalidJSON
         }
@@ -329,13 +329,15 @@ enum AnthropicMapper {
     }
 }
 
-struct AnthropicStreamAccumulator {
+package struct AnthropicStreamAccumulator {
     private var message: [String: Any] = [:]
     private var blocks: [Int: [String: Any]] = [:]
     private var partialInputs: [Int: String] = [:]
-    private(set) var completed = false
+    package private(set) var completed = false
 
-    mutating func consume(_ event: ProviderSSEEvent) throws -> [AgentStreamEvent] {
+    package init() {}
+
+    package mutating func consume(_ event: ProviderSSEEvent) throws -> [AgentStreamEvent] {
         let json = try ProviderJSON.object(Data(event.data.utf8))
         let type = json["type"] as? String ?? event.name
         switch type {

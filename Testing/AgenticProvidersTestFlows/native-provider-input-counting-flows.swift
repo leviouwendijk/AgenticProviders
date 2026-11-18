@@ -4,8 +4,8 @@ import AgenticProviderHTTP
 import Foundation
 import TestFlows
 
-@testable import AgenticAnthropic
-@testable import AgenticOpenAI
+import AgenticAnthropic
+import AgenticOpenAI
 
 extension AgenticProvidersFlowTesting {
     static func runNativeProviderInputCounting() throws -> [TestDiagnostic] {

@@ -174,8 +174,8 @@ struct OpenAIResponseProvider: AgentModelResponseProviding {
     }
 }
 
-enum OpenAIMapper {
-    static func request(_ request: AgentRequest, model: String, stream: Bool) throws -> Data {
+package enum OpenAIMapper {
+    package static func request(_ request: AgentRequest, model: String, stream: Bool) throws -> Data {
         guard !request.messages.isEmpty else { throw ProviderHTTPError.invalidJSON }
         var input: [[String: Any]] = []
         for message in request.messages {
@@ -251,7 +251,7 @@ enum OpenAIMapper {
 
     /// Use the generation mapper so native replay and schemas occur once.
     /// The count endpoint does not accept response-generation parameters.
-    static func countRequest(_ request: AgentRequest, model: String) throws -> Data {
+    package static func countRequest(_ request: AgentRequest, model: String) throws -> Data {
         let payload = try ProviderJSON.object(Self.request(request, model: model, stream: false))
         let fields: Set<String> = [
             "model", "input", "instructions", "tools", "text", "reasoning",
@@ -260,7 +260,7 @@ enum OpenAIMapper {
         return try ProviderJSON.encode(payload.filter { fields.contains($0.key) })
     }
 
-    static func call(_ item: [String: Any]) throws -> FunctionCall? {
+    package static func call(_ item: [String: Any]) throws -> FunctionCall? {
         guard item["type"] as? String == "function_call" else { return nil }
         guard let id = item["call_id"] as? String,
             let name = item["name"] as? String,
@@ -270,7 +270,7 @@ enum OpenAIMapper {
         return .init(id: id, name: name, input: input)
     }
 
-    static func response(_ object: [String: Any]) throws -> AgentResponse {
+    package static func response(_ object: [String: Any]) throws -> AgentResponse {
         guard let output = object["output"] as? [[String: Any]] else {
             throw ProviderHTTPError.invalidJSON
         }

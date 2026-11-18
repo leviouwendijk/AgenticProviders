@@ -1,6 +1,6 @@
 import Agentic
 
-struct HYAIStreamAccumulator: Sendable {
+package struct HYAIStreamAccumulator: Sendable {
     private struct PartialToolCall: Sendable {
         var id: String?
         var name: String?
@@ -17,7 +17,7 @@ struct HYAIStreamAccumulator: Sendable {
     private let requestedModel: String
     private let baseMetadata: [String: String]
 
-    init(
+    package init(
         requestedModel: String,
         metadata: [String: String]
     ) {
@@ -25,7 +25,7 @@ struct HYAIStreamAccumulator: Sendable {
         self.baseMetadata = metadata
     }
 
-    mutating func consume(
+    package mutating func consume(
         _ chunk: HYAIChatCompletionChunk
     ) throws -> [AgentStreamEvent] {
         // Usage arrives in its own chunk after the one carrying
@@ -170,7 +170,7 @@ struct HYAIStreamAccumulator: Sendable {
     }
 
     /// The completed response, with the usage reported after content ended.
-    func finish() throws -> AgentStreamEvent {
+    package func finish() throws -> AgentStreamEvent {
         guard let response else {
             throw HYAIGatewayError
                 .streamEndedWithoutResponse

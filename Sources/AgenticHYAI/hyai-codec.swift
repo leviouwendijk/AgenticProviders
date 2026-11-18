@@ -1,7 +1,7 @@
 import Foundation
 
-struct HYAICodec {
-    static func encode<Value: Encodable>(
+package struct HYAICodec {
+    package static func encode<Value: Encodable>(
         _ value: Value
     ) throws -> Data {
         let encoder = JSONEncoder()
@@ -16,7 +16,7 @@ struct HYAICodec {
         )
     }
 
-    static func decode<Value: Decodable>(
+    package static func decode<Value: Decodable>(
         _ type: Value.Type,
         from data: Data
     ) throws -> Value {

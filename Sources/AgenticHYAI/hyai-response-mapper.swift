@@ -2,8 +2,8 @@ import Agentic
 import Foundation
 import Primitives
 
-struct HYAIResponseMapper {
-    static func map(
+package struct HYAIResponseMapper {
+    package static func map(
         _ response: HYAIChatCompletionResponse,
         requestedModel: String,
         metadata: [String: String]
@@ -58,7 +58,7 @@ struct HYAIResponseMapper {
 
     /// A response that finished for tool calls must carry at least one;
     /// otherwise the turn would silently complete as empty text.
-    static func requireCalls(
+    package static func requireCalls(
         _ calls: [FunctionCall],
         finishReason: String?
     ) throws {
@@ -67,7 +67,7 @@ struct HYAIResponseMapper {
         }
     }
 
-    static func mapToolCall(
+    package static func mapToolCall(
         id: String?,
         name: String?,
         arguments: String?
@@ -98,7 +98,7 @@ struct HYAIResponseMapper {
         }
     }
 
-    static func baseMetadata(
+    package static func baseMetadata(
         requestedModel: String,
         resolvedModel: String?,
         finishReason: String?,
@@ -129,7 +129,7 @@ struct HYAIResponseMapper {
         return result
     }
 
-    static func stopReason(
+    package static func stopReason(
         _ value: String?,
         hasToolCalls: Bool
     ) -> AgentStopReason {

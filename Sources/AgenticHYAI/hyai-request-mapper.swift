@@ -2,8 +2,8 @@ import Agentic
 import Foundation
 import Primitives
 
-struct HYAIRequestMapper {
-    static func map(
+package struct HYAIRequestMapper {
+    package static func map(
         _ request: AgentRequest,
         model: String,
         purpose: AgentModelRoutePurpose,

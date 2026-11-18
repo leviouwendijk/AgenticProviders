@@ -1,126 +1,126 @@
 import Agentic
 import Primitives
 
-struct HYAIChatRequest: Sendable, Codable {
-    let model: String
-    let messages: [HYAIChatMessage]
-    let tools: [HYAITool]?
-    let stream: Bool
-    let temperature: Double?
-    let topP: Double?
-    let maxTokens: Int?
-    let stop: [String]?
+package struct HYAIChatRequest: Sendable, Codable {
+    package let model: String
+    package let messages: [HYAIChatMessage]
+    package let tools: [HYAITool]?
+    package let stream: Bool
+    package let temperature: Double?
+    package let topP: Double?
+    package let maxTokens: Int?
+    package let stop: [String]?
     /// Streams report usage only when asked (`include_usage`).
-    let streamOptions: HYAIStreamOptions?
-    let hyai: HYAIRouterOptions?
+    package let streamOptions: HYAIStreamOptions?
+    package let hyai: HYAIRouterOptions?
 }
 
-struct HYAIStreamOptions: Sendable, Codable {
-    let includeUsage: Bool
+package struct HYAIStreamOptions: Sendable, Codable {
+    package let includeUsage: Bool
 }
 
 /// `GET /v1/models`: the catalog with per-model pricing.
-struct HYAIModelList: Sendable, Codable {
-    let data: [HYAIModelListing]
+package struct HYAIModelList: Sendable, Codable {
+    package let data: [HYAIModelListing]
 }
 
-struct HYAIModelListing: Sendable, Codable {
-    let id: String
-    let pricing: HYAIModelPricing?
+package struct HYAIModelListing: Sendable, Codable {
+    package let id: String
+    package let pricing: HYAIModelPricing?
 }
 
 /// EUR (or `currency`) per million tokens; nil when not published.
-struct HYAIModelPricing: Sendable, Codable {
-    let inputPerMillion: Double?
-    let cachedInputPerMillion: Double?
-    let outputPerMillion: Double?
-    let currency: String?
+package struct HYAIModelPricing: Sendable, Codable {
+    package let inputPerMillion: Double?
+    package let cachedInputPerMillion: Double?
+    package let outputPerMillion: Double?
+    package let currency: String?
 }
 
-struct HYAIRouterOptions: Sendable, Codable {
-    let task: HYAITask
-    let policy: HYAIPolicy
+package struct HYAIRouterOptions: Sendable, Codable {
+    package let task: HYAITask
+    package let policy: HYAIPolicy
 }
 
-struct HYAIChatMessage: Sendable, Codable {
-    let role: String
-    let content: String?
-    let toolCalls: [HYAIToolCall]?
-    let toolCallId: String?
+package struct HYAIChatMessage: Sendable, Codable {
+    package let role: String
+    package let content: String?
+    package let toolCalls: [HYAIToolCall]?
+    package let toolCallId: String?
 }
 
-struct HYAITool: Sendable, Codable {
-    let type: String
-    let function: HYAIToolDefinition
+package struct HYAITool: Sendable, Codable {
+    package let type: String
+    package let function: HYAIToolDefinition
 }
 
-struct HYAIToolDefinition: Sendable, Codable {
-    let name: String
-    let description: String
-    let parameters: JSONValue
+package struct HYAIToolDefinition: Sendable, Codable {
+    package let name: String
+    package let description: String
+    package let parameters: JSONValue
 }
 
-struct HYAIToolCall: Sendable, Codable {
-    let index: Int?
-    let id: String?
-    let type: String?
-    let function: HYAIFunctionCall?
+package struct HYAIToolCall: Sendable, Codable {
+    package let index: Int?
+    package let id: String?
+    package let type: String?
+    package let function: HYAIFunctionCall?
 }
 
-struct HYAIFunctionCall: Sendable, Codable {
-    let name: String?
-    let arguments: String?
+package struct HYAIFunctionCall: Sendable, Codable {
+    package let name: String?
+    package let arguments: String?
 }
 
-struct HYAIChatCompletionResponse: Sendable, Codable {
-    let model: String?
-    let choices: [HYAIChatCompletionChoice]
-    let usage: HYAIUsage?
+package struct HYAIChatCompletionResponse: Sendable, Codable {
+    package let model: String?
+    package let choices: [HYAIChatCompletionChoice]
+    package let usage: HYAIUsage?
 }
 
-struct HYAIChatCompletionChoice: Sendable, Codable {
-    let message: HYAIChatMessage
-    let finishReason: String?
+package struct HYAIChatCompletionChoice: Sendable, Codable {
+    package let message: HYAIChatMessage
+    package let finishReason: String?
 }
 
-struct HYAIChatCompletionChunk: Sendable, Codable {
-    let model: String?
-    let choices: [HYAIChatCompletionChunkChoice]
-    let usage: HYAIUsage?
+package struct HYAIChatCompletionChunk: Sendable, Codable {
+    package let model: String?
+    package let choices: [HYAIChatCompletionChunkChoice]
+    package let usage: HYAIUsage?
 }
 
-struct HYAIChatCompletionChunkChoice: Sendable, Codable {
-    let delta: HYAIChatCompletionDelta
-    let finishReason: String?
+package struct HYAIChatCompletionChunkChoice: Sendable, Codable {
+    package let delta: HYAIChatCompletionDelta
+    package let finishReason: String?
 }
 
-struct HYAIChatCompletionDelta: Sendable, Codable {
-    let content: String?
-    let toolCalls: [HYAIToolCall]?
+package struct HYAIChatCompletionDelta: Sendable, Codable {
+    package let content: String?
+    package let toolCalls: [HYAIToolCall]?
 }
 
 /// OpenAI-shaped usage: promptTokens includes cached and cache-created tokens,
 /// completionTokens includes reasoning tokens.
-struct HYAIUsage: Sendable, Codable {
-    let promptTokens: Int?
-    let completionTokens: Int?
-    let totalTokens: Int?
-    let promptTokensDetails: HYAIPromptTokensDetails?
-    let completionTokensDetails: HYAICompletionTokensDetails?
+package struct HYAIUsage: Sendable, Codable {
+    package let promptTokens: Int?
+    package let completionTokens: Int?
+    package let totalTokens: Int?
+    package let promptTokensDetails: HYAIPromptTokensDetails?
+    package let completionTokensDetails: HYAICompletionTokensDetails?
 }
 
-struct HYAIPromptTokensDetails: Sendable, Codable {
-    let cachedTokens: Int?
-    let createdCacheTokens: Int?
+package struct HYAIPromptTokensDetails: Sendable, Codable {
+    package let cachedTokens: Int?
+    package let createdCacheTokens: Int?
 }
 
-struct HYAICompletionTokensDetails: Sendable, Codable {
-    let reasoningTokens: Int?
+package struct HYAICompletionTokensDetails: Sendable, Codable {
+    package let reasoningTokens: Int?
 }
 
 extension HYAIUsage {
     /// Normalize to AgentUsage, where inputTokens excludes cache reads and writes.
-    var agentUsage: AgentUsage {
+    package var agentUsage: AgentUsage {
         let cachedRead = promptTokensDetails?.cachedTokens
         let cachedWrite = promptTokensDetails?.createdCacheTokens
         let input = promptTokens.map {

@@ -4,8 +4,8 @@ import Foundation
 import Primitives
 import TestFlows
 
-@testable import AgenticAnthropic
-@testable import AgenticOpenAI
+import AgenticAnthropic
+import AgenticOpenAI
 
 extension AgenticProvidersFlowTesting {
     static func runNativeProviderWireContracts() throws -> [TestDiagnostic] {

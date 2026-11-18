@@ -207,7 +207,7 @@ public enum HYAIModelCatalog {
 
     /// Snapshots for every listed model with both an input and an output
     /// price; a cached-input price is included when published.
-    static func liveSnapshots(
+    package static func liveSnapshots(
         _ list: HYAIModelList,
         fetchedAt: Date
     ) throws -> [ModelPricingSnapshot] {
