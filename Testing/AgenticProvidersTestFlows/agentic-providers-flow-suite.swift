@@ -169,6 +169,18 @@ enum AgenticProvidersFlowSuite: TestFlowRegistry {
         ) {
             try await AgenticProvidersFlowTesting.runBedrockLiveNestedProfileAPI()
         },
+        TestFlow(
+            ID.hyai_direct_call_probe,
+            tags: ["hyai", "tool-use", "live", "direct-call-probe"]
+        ) {
+            try await AgenticProvidersFlowTesting.runHYAIDirectCallProbe()
+        },
+        TestFlow(
+            ID.anthropic_direct_call_probe,
+            tags: ["anthropic", "tool-use", "live", "direct-call-probe"]
+        ) {
+            try await AgenticProvidersFlowTesting.runAnthropicDirectCallProbe()
+        },
     ]
 }
 
@@ -204,5 +216,7 @@ extension AgenticProvidersFlowSuite {
         static let bedrock_structured_output_lowering = "bedrock-structured-output-lowering"
         static let bedrock_open_schema_lowering = "bedrock-open-schema-lowering"
         static let bedrock_live_nested_profile_api = "bedrock-live-nested-profile-api"
+        static let hyai_direct_call_probe = "hyai-direct-call-probe"
+        static let anthropic_direct_call_probe = "anthropic-direct-call-probe"
     }
 }
