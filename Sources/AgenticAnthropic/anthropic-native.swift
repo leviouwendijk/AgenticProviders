@@ -65,6 +65,9 @@ public struct AnthropicModelProvider: AgentModelProvider {
         ]
     }
 
+    /// Every profile takes calls to tools outside the request's definitions
+    /// (`undeclared_calls`): the Messages API returns them and accepts them
+    /// in the history, per the direct-call probe (2026-11-20).
     public var profileProviders: [any AgentModelProfileProvider] {
         [
             SnapshotAgentModelProfileProvider(
@@ -77,6 +80,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-fable-5-2", title: "Claude Fable 5.2",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                         .init(
                             known: KnownModel.claude.opus_5_5,
@@ -84,6 +88,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-opus-5-5", title: "Claude Opus 5.5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                         .init(
                             known: KnownModel.claude.sonnet_5_5,
@@ -91,6 +96,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-sonnet-5-5", title: "Claude Sonnet 5.5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                         .init(
                             known: KnownModel.claude.haiku_5_5,
@@ -98,6 +104,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-haiku-5-5", title: "Claude Haiku 5.5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                         .init(
                             known: KnownModel.claude.opus_5,
@@ -105,6 +112,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-opus-5", title: "Claude Opus 5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                         .init(
                             known: KnownModel.claude.sonnet_5,
@@ -112,6 +120,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-sonnet-5", title: "Claude Sonnet 5",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                         .init(
                             known: KnownModel.claude.opus_4_8,
@@ -119,6 +128,7 @@ public struct AnthropicModelProvider: AgentModelProvider {
                             model: "claude-opus-4-8", title: "Claude Opus 4.8",
                             capabilities: [
                                 .text, .tool_use, .streaming, .structured_output, .reasoning,
+                                .undeclared_calls,
                             ]),
                     ]))
         ]
