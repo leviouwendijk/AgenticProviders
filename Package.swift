@@ -33,16 +33,7 @@ let package = Package(
             name: "AgenticAnthropic",
             targets: ["AgenticAnthropic"]
         ),
-
-        // PACKAGES TO DO:
-        // ....AgenticGoogle
-        // ....AgenticMeta
-
-        // testing
-        .executable(
-            name: "t_ap_main",
-            targets: ["AgenticProvidersTestFlows"]
-        ),
+        .library(name: "AgenticProviderHTTP", targets: ["AgenticProviderHTTP"]),
     ],
     dependencies: [
         .package(url: "https://github.com/leviouwendijk/Agentic.git", branch: "master"),
@@ -53,7 +44,6 @@ let package = Package(
         .package(url: "https://github.com/leviouwendijk/Cryptography.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/Schema.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/Macros.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/TestFlows.git", branch: "master"),
     ],
     targets: [
         .target(
@@ -122,26 +112,6 @@ let package = Package(
                 .product(name: "Milieu", package: "Milieu"),
                 .product(name: "Schema", package: "Schema"),
             ]
-        ),
-
-        .executableTarget(
-            name: "AgenticProvidersTestFlows",
-            dependencies: [
-                "AgenticApple",
-                "AgenticAWS",
-                "AgenticOllama",
-                "AgenticHYAI",
-                "AgenticOpenAI",
-                "AgenticAnthropic",
-                "AgenticProviderHTTP",
-                .product(name: "Agentic", package: "Agentic"),
-                .product(name: "AgenticModels", package: "Agentic"),
-                .product(name: "Primitives", package: "Primitives"),
-                .product(name: "AWSConnector", package: "AWSConnector"),
-                .product(name: "Schema", package: "Schema"),
-                .product(name: "TestFlows", package: "TestFlows"),
-            ],
-            path: "Testing/AgenticProvidersTestFlows"
         ),
     ],
     swiftLanguageModes: [.v6]
