@@ -7,14 +7,14 @@ import TestFlows
 
 /// Live: whether a gateway lets the model call a tool by its own name when
 /// that tool is not in the request's definitions, its contract only in the
-/// history (as `inspect_capability` leaves it). Two questions, answered
+/// history (as `standard_tool_inspect_capability` leaves it). Two questions, answered
 /// apart:
 ///
 /// 1. Does a call to the undeclared name come back from the gateway?
 /// 2. Is a request with such a call in its history accepted?
 ///
-/// Both yes: the gateway can take direct calls, and `inspect_capability`
-/// can say "call it by its own name" there instead of `call_capability`.
+/// Both yes: the gateway can take direct calls, and `standard_tool_inspect_capability`
+/// can say "call it by its own name" there instead of `standard_tool_call_capability`.
 /// Live calls cost money, so it runs only when asked for, with the
 /// gateway's key present:
 /// `AGENTIC_PROBE_DIRECT_CALLS=1 with_dev_environment .build/release/t_ap_main --tag direct-call-probe`.
@@ -78,7 +78,7 @@ extension AgenticProvidersFlowTesting {
         // are not only the one the model just used.
         let tools = [
             ToolDescriptor(
-                name: "inspect_capability",
+                name: "standard_tool_inspect_capability",
                 description: "Return one available capability's contract.",
                 input: .object([
                     "type": .string("object"),
@@ -100,7 +100,7 @@ extension AgenticProvidersFlowTesting {
         // `probe_lookup`, which is not among the definitions.
         let inspect = FunctionCall(
             id: "probe_inspect_1",
-            name: "inspect_capability",
+            name: "standard_tool_inspect_capability",
             input: .object(["identifier": .string("probe_lookup")])
         )
         let contract: JSONValue = .object([

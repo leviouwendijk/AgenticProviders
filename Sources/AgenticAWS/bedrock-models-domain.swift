@@ -8,7 +8,7 @@ import Macros
 ///
 /// Tools resolve `BedrockModelDiscovery` from the invocation's services
 /// (see `AgenticAWS.models.discovery()`), so credentials stay host-owned.
-@Domain
+@Domain("bedrock", aliases: ["bedrockmodels"])
 public enum BedrockModels {
     /// Discovery filter shared by the listing Tools.
     @JSONSchema
@@ -50,7 +50,7 @@ public enum BedrockModels {
 }
 
 public extension BedrockModels.Tools {
-    @Tool("bedrock_list_model_handles")
+    @Tool("list_model_handles")
     struct Handles: Tool {
         public typealias Input = BedrockModels.Filter
 
@@ -93,7 +93,7 @@ public extension BedrockModels.Tools {
         }
     }
 
-    @Tool("bedrock_list_discovered_profiles")
+    @Tool("list_discovered_profiles")
     struct Profiles: Tool {
         public typealias Input = BedrockModels.Filter
 
@@ -185,7 +185,7 @@ public extension BedrockModels.Tools {
         }
     }
 
-    @Tool("bedrock_resolve_model_handle")
+    @Tool("resolve_model_handle")
     struct Resolve: Tool {
         @JSONSchema
         public struct Input: Sendable, Codable, Hashable {

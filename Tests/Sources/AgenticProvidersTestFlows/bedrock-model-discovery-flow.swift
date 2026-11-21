@@ -252,9 +252,9 @@ extension AgenticProvidersFlowTesting {
         ]
 
         let expectedNames = [
-            "bedrock_list_discovered_profiles",
-            "bedrock_list_model_handles",
-            "bedrock_resolve_model_handle",
+            "bedrock_tool_list_discovered_profiles",
+            "bedrock_tool_list_model_handles",
+            "bedrock_tool_resolve_model_handle",
         ]
         let actualNames = definitions
             .map { definition in
