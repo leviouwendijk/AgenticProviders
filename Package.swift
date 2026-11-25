@@ -36,7 +36,7 @@ let package = Package(
         .library(name: "AgenticProviderHTTP", targets: ["AgenticProviderHTTP"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/leviouwendijk/Agentic.git", branch: "master"),
+        .package(url: "https://github.com/swift-agentic/Agentic.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/Workspace.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/AWSConnector.git", branch: "master"),
         .package(url: "https://github.com/leviouwendijk/Primitives.git", branch: "master"),
