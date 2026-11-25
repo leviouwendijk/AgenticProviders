@@ -37,13 +37,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/swift-agentic/Agentic.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Workspace.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Workspace.git", branch: "master"),
         .package(url: "https://github.com/swift-sdk/AWSConnector.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Primitives.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Milieu.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Cryptography.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Schema.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Macros.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Primitives.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Milieu.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Cryptography.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Schema.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Macros.git", branch: "master"),
     ],
     targets: [
         .target(

@@ -22,8 +22,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/swift-agentic/Agentic.git", branch: "master"),
         .package(url: "https://github.com/swift-sdk/AWSConnector.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Primitives.git", branch: "master"),
-        .package(url: "https://github.com/leviouwendijk/Schema.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Primitives.git", branch: "master"),
+        .package(url: "https://github.com/swift-lco/Schema.git", branch: "master"),
         .package(url: "https://github.com/swift-tooling/TestFlows.git", branch: "master"),
         .package(path: ".."),
     ],
