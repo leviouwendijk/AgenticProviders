@@ -78,7 +78,7 @@ public extension BedrockModels.Tools {
 
         public func call(
             _ input: Input,
-            in context: ToolContext
+            in context: CapabilityContext
         ) async throws -> Output {
             let discovery = try context.require(BedrockModelDiscovery.self)
             let handles = try await discovery.handles(
@@ -165,7 +165,7 @@ public extension BedrockModels.Tools {
 
         public func call(
             _ input: Input,
-            in context: ToolContext
+            in context: CapabilityContext
         ) async throws -> Output {
             let discovery = try context.require(BedrockModelDiscovery.self)
             let handles = try await discovery.handles(
@@ -251,7 +251,7 @@ public extension BedrockModels.Tools {
 
         public func call(
             _ input: Input,
-            in context: ToolContext
+            in context: CapabilityContext
         ) async throws -> Output {
             let discovery = try context.require(BedrockModelDiscovery.self)
             let query = input.query.trimmingCharacters(
